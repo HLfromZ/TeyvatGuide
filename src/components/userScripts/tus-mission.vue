@@ -48,7 +48,6 @@ import miscReq from "@req/miscReq.js";
 import painterReq from "@req/painterReq.js";
 import postReq from "@req/postReq.js";
 import useAppStore from "@store/app.js";
-import useUserStore from "@store/user.js";
 import TGLogger from "@utils/TGLogger.js";
 import TGNotify from "@utils/TGNotify.js";
 import { storeToRefs } from "pinia";
@@ -73,11 +72,16 @@ type ParseMission = {
   /** 完成次数 */
   cycleTimes?: number;
 };
+/** 任务组件参数 */
+type TusMissionProps = {
+  /** 米社账号 */
+  acCur: TGApp.App.Account.User | undefined;
+};
 
-const { cookie, uid } = storeToRefs(useUserStore());
 const { cancelLike } = storeToRefs(useAppStore());
 
 const loadScript = defineModel<boolean>();
+const props = defineProps<TusMissionProps>();
 
 const todayPoints = ref<number>(0);
 const totalPoints = ref<number>(0);
@@ -90,7 +94,7 @@ const missionList = shallowRef<Array<TGApp.BBS.Mission.MissionItem>>([]);
 defineExpose({ tryAuto });
 
 watch(
-  () => uid.value,
+  () => props.acCur,
   () => {
     todayPoints.value = 0;
     totalPoints.value = 0;
@@ -136,6 +140,10 @@ function mergeMission(
 }
 
 async function tryRefresh(): Promise<void> {
+  if (!props.acCur) {
+    showSnackbar.warn("未检测到当前账号数据");
+    return;
+  }
   if (loadScript.value) {
     showSnackbar.warn("任务正在执行中，请稍后再试");
     return;
@@ -144,19 +152,17 @@ async function tryRefresh(): Promise<void> {
   loadState.value = true;
   await TGLogger.ScriptSep("米游币任务");
   await TGLogger.Script("[米游币任务]刷新任务状态");
-  if (!cookie.value) {
-    await TGLogger.Script("[米游币任务]未检测到Cookie");
-    showSnackbar.warn("当前账号未登录，请先登录");
-    await TGLogger.ScriptSep("米游币任务", false);
-    return;
-  }
-  await refreshState(cookie.value);
+  await refreshState(props.acCur.cookie);
   await TGLogger.ScriptSep("米游币任务", false);
   loadScript.value = false;
   loadState.value = false;
 }
 
 async function tryAuto(skip: boolean = false): Promise<void> {
+  if (!props.acCur) {
+    showSnackbar.warn("未检测到当前账号数据");
+    return;
+  }
   if (loadScript.value) {
     showSnackbar.warn("任务正在执行中，请稍后再试");
     return;
@@ -165,20 +171,14 @@ async function tryAuto(skip: boolean = false): Promise<void> {
   loadMission.value = true;
   await TGLogger.ScriptSep("米游币任务");
   await TGLogger.Script("[米游币任务]开始执行任务");
-  if (!cookie.value) {
-    await TGLogger.Script("[米游币任务]未检测到Cookie");
-    showSnackbar.warn("当前账号未登录，请先登录");
-    await TGLogger.ScriptSep("米游币任务", false);
-    return;
-  }
-  await refreshState(cookie.value);
+  await refreshState(props.acCur.cookie);
   if (parseMissions.value.length === 0 || missionList.value.length === 0) {
     await TGLogger.ScriptSep("米游币任务", false);
     loadScript.value = false;
     loadMission.value = false;
     return;
   }
-  await autoSign(cookie.value, skip);
+  await autoSign(props.acCur.cookie, skip);
   const postFilter = parseMissions.value.filter((i) => i.key !== "continuous_sign");
   if (postFilter.every((i) => i.status)) {
     await TGLogger.Script("[米游币任务]所有任务已完成");
@@ -198,8 +198,12 @@ async function tryAuto(skip: boolean = false): Promise<void> {
   if (viewFind) viewCnt = viewFind.process;
   await TGLogger.Script("[米游币任务]获取帖子列表");
   const listResp = await painterReq.forum.recent(26, 2, 2, undefined, 20);
-  const ckShare = { stoken: cookie.value.stoken, stuid: cookie.value.stuid, mid: cookie.value.mid };
-  const ckPost = { ltoken: cookie.value.ltoken, ltuid: cookie.value.ltuid };
+  const ckShare = {
+    stoken: props.acCur.cookie.stoken,
+    stuid: props.acCur.cookie.stuid,
+    mid: props.acCur.cookie.mid,
+  };
+  const ckPost = { ltoken: props.acCur.cookie.ltoken, ltuid: props.acCur.cookie.ltuid };
   for (const post of listResp.list) {
     if (!isShare) {
       await TGLogger.Script(`[米游币任务]正在分享帖子${post.post.post_id}`);
@@ -256,7 +260,7 @@ async function tryAuto(skip: boolean = false): Promise<void> {
     }
   }
   await TGLogger.Script("[米游币任务]任务执行完毕，即将刷新任务状态");
-  await refreshState(cookie.value);
+  await refreshState(props.acCur.cookie);
   await TGLogger.ScriptSep("米游币任务", false);
   loadScript.value = false;
   loadMission.value = false;

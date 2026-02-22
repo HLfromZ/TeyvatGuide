@@ -32,18 +32,6 @@
                 <span>{{ item.raw.brief.nickname }}</span>
                 <span>UID:{{ item.raw.uid }}</span>
               </div>
-              <div class="append">
-                <v-icon v-if="item.raw.uid === uid" color="green" title="当前登录账号">
-                  mdi-account-check
-                </v-icon>
-                <v-icon
-                  v-else
-                  icon="mdi-account-convert"
-                  size="small"
-                  title="切换用户"
-                  @click="loadAccount(item.raw.uid)"
-                />
-              </div>
             </div>
           </template>
         </v-select>
@@ -61,8 +49,8 @@
   <div class="us-page-container">
     <!-- 左侧脚本列表 -->
     <div class="us-scripts">
-      <TusMission ref="mission" v-model="runScript" />
-      <TusSign ref="sign" v-model="runScript" />
+      <TusMission ref="mission" v-model="runScript" :ac-cur="curAccount" />
+      <TusSign ref="sign" v-model="runScript" :ac-cur="curAccount" />
     </div>
     <!-- 右侧脚本输出 -->
     <TusOutput />
@@ -81,6 +69,7 @@ import painterReq from "@req/painterReq.js";
 import TSUserAccount from "@Sqlm/userAccount.js";
 import useUserStore from "@store/user.js";
 import { exit } from "@tauri-apps/plugin-process";
+import TGLogger from "@utils/TGLogger.js";
 import TGNotify from "@utils/TGNotify.js";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, onMounted, ref, shallowRef, useTemplateRef } from "vue";
@@ -89,7 +78,7 @@ import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
 
-const { uid, briefInfo, cookie, account } = storeToRefs(useUserStore());
+const { uid } = storeToRefs(useUserStore());
 
 // 路由参数
 const autoRun = ref<boolean>(false);
@@ -97,10 +86,12 @@ const exitAfter = ref<boolean>(false);
 const skipGeetest = ref<boolean>(false);
 const targetUids = shallowRef<Array<string>>([]);
 
-const accounts = shallowRef<Array<TGApp.App.Account.User>>([]);
-const curAccount = shallowRef<TGApp.App.Account.User>();
 const runScript = ref<boolean>(false);
 const runAll = ref<boolean>(false);
+
+const accounts = shallowRef<Array<TGApp.App.Account.User>>([]);
+const curAccount = shallowRef<TGApp.App.Account.User>();
+
 const missionEl = useTemplateRef("mission");
 const signEl = useTemplateRef("sign");
 
@@ -137,7 +128,12 @@ async function tryAutoRun(): Promise<void> {
   }
   const startTime = Date.now();
   for (const uid of uids) {
-    await loadAccount(uid);
+    const acFind = await TSUserAccount.account.getAccount(uid);
+    if (!acFind) {
+      await TGLogger.Script(`未检测到 ${uid} 对应账号数据，跳过`);
+      continue;
+    }
+    curAccount.value = acFind;
     await tryExecAll();
   }
   if (exitAfter.value) {
@@ -149,31 +145,9 @@ async function tryAutoRun(): Promise<void> {
   }
 }
 
-async function loadAccount(ac: string): Promise<void> {
-  if (uid.value && ac === uid.value) {
-    showSnackbar.warn("该账户已经登录，无需切换");
-    return;
-  }
-  const accountGet = await TSUserAccount.account.getAccount(ac);
-  if (!accountGet) {
-    showSnackbar.warn(`未找到${uid}的账号信息，请重新登录`);
-    return;
-  }
-  uid.value = ac;
-  briefInfo.value = accountGet.brief;
-  cookie.value = accountGet.cookie;
-  const gameAccount = await TSUserAccount.game.getCurAccount(ac);
-  if (!gameAccount) {
-    showSnackbar.warn(`未找到${uid.value}的游戏账号信息，请尝试刷新`);
-    return;
-  }
-  account.value = gameAccount;
-  showSnackbar.success(`成功切换到用户${uid.value}`);
-}
-
 async function tryCkVerify(): Promise<void> {
-  if (!cookie.value) {
-    showSnackbar.warn("当前账号未登录，请先登录");
+  if (!curAccount.value) {
+    showSnackbar.warn("未检测到当前登录账号");
     return;
   }
   const check = await showDialog.check("确定验证？", "将通过执行米社社区打卡以验证ck有效性");
@@ -182,9 +156,9 @@ async function tryCkVerify(): Promise<void> {
     return;
   }
   const ck = {
-    stoken: cookie.value.stoken,
-    stuid: cookie.value.stuid,
-    mid: cookie.value.mid,
+    stoken: curAccount.value.cookie.stoken,
+    stuid: curAccount.value.cookie.stuid,
+    mid: curAccount.value.cookie.mid,
   };
   let flag = false;
   let challenge: string | undefined = undefined;
@@ -211,10 +185,6 @@ async function tryCkVerify(): Promise<void> {
 }
 
 async function tryExecAll(): Promise<void> {
-  if (!cookie.value) {
-    showSnackbar.warn("当前账号未登录，请先登录");
-    return;
-  }
   if (!curAccount.value) {
     showSnackbar.warn("当前账号未选择，请先选择账号");
     return;

@@ -62,7 +62,6 @@ import miscReq from "@req/miscReq.js";
 import takumiReq from "@req/takumiReq.js";
 import TSUserAccount from "@Sqlm/userAccount.js";
 import useBBSStore from "@store/bbs.js";
-import useUserStore from "@store/user.js";
 import TGLogger from "@utils/TGLogger.js";
 import TGNotify from "@utils/TGNotify.js";
 import { storeToRefs } from "pinia";
@@ -90,11 +89,17 @@ type SignAccount = {
   /** 奖励信息 */
   reward?: TGApp.BBS.Sign.HomeAward;
 };
+/** 签到组件参数 */
+type TusSignProps = {
+  /** 米社账号 */
+  acCur: TGApp.App.Account.User | undefined;
+};
 
-const { cookie, uid } = storeToRefs(useUserStore());
 const { gameList } = storeToRefs(useBBSStore());
 
 const loadScript = defineModel<boolean>();
+const props = defineProps<TusSignProps>();
+
 const loadState = ref<boolean>(false);
 const loadSign = ref<boolean>(false);
 const signAccounts = ref<Array<SignAccount>>([]);
@@ -103,7 +108,7 @@ const gameAccounts = shallowRef<Array<TGApp.Sqlite.Account.Game>>([]);
 defineExpose({ tryAuto });
 
 watch(
-  () => uid.value,
+  () => props.acCur,
   async () => await loadData(),
 );
 
@@ -120,8 +125,8 @@ function getGameInfo(biz: string): SignGameInfo {
 async function loadData(): Promise<void> {
   gameAccounts.value = [];
   signAccounts.value = [];
-  if (uid.value === undefined) return;
-  gameAccounts.value = await TSUserAccount.game.getAccount(uid.value);
+  if (props.acCur === undefined) return;
+  gameAccounts.value = await TSUserAccount.game.getAccount(props.acCur.uid);
   for (const ac of gameAccounts.value) {
     const info = getGameInfo(ac.gameBiz);
     signAccounts.value.push({ selected: true, account: ac, info });
@@ -147,6 +152,10 @@ async function deleteAccount(item: SignAccount): Promise<void> {
 }
 
 async function tryRefresh(): Promise<void> {
+  if (!props.acCur) {
+    showSnackbar.warn("未检测到当前账号数据");
+    return;
+  }
   if (loadScript.value) {
     showSnackbar.warn("任务正在执行中，请稍后再试");
     return;
@@ -155,15 +164,7 @@ async function tryRefresh(): Promise<void> {
   loadState.value = true;
   await TGLogger.ScriptSep("签到任务");
   await TGLogger.Script("[签到任务]刷新账户");
-  if (!cookie.value) {
-    await TGLogger.Script("[签到任务]未检测到Cookie");
-    showSnackbar.warn("当前账户未登录，请先登录");
-    await TGLogger.ScriptSep("签到任务", false);
-    loadState.value = false;
-    loadScript.value = false;
-    return;
-  }
-  await refreshState(cookie.value);
+  await refreshState(props.acCur.cookie, props.acCur.uid);
   await TGLogger.Script(`[签到任务]刷新账户成功，成功获取${signAccounts.value.length}个账户`);
   await TGLogger.ScriptSep("签到任务", false);
   loadScript.value = false;
@@ -171,6 +172,10 @@ async function tryRefresh(): Promise<void> {
 }
 
 async function tryAuto(skip: boolean = false): Promise<void> {
+  if (!props.acCur) {
+    showSnackbar.warn("未检测到当前账号数据");
+    return;
+  }
   if (loadScript.value) {
     showSnackbar.warn("任务正在执行中，请稍后再试");
     return;
@@ -179,17 +184,9 @@ async function tryAuto(skip: boolean = false): Promise<void> {
   loadSign.value = true;
   await TGLogger.ScriptSep("签到任务");
   await TGLogger.Script("[签到任务]执行签到");
-  if (!cookie.value) {
-    await TGLogger.Script("[签到任务]未检测到Cookie");
-    showSnackbar.warn("当前账户未登录，请先登录");
-    await TGLogger.ScriptSep("签到任务", false);
-    loadScript.value = false;
-    loadSign.value = false;
-    return;
-  }
   if (signAccounts.value.length === 0 || signAccounts.value.some((i) => i.stat === undefined)) {
     await TGLogger.Script("[签到任务]未检测到游戏账户或签到状态，正在刷新");
-    await refreshState(cookie.value);
+    await refreshState(props.acCur.cookie, props.acCur.uid);
   }
   const selected = signAccounts.value.filter((i) => i.selected);
   if (selected.length === 0) {
@@ -200,23 +197,22 @@ async function tryAuto(skip: boolean = false): Promise<void> {
     loadSign.value = false;
     return;
   }
-  await trySign(selected, cookie.value, skip);
-  await refreshState(cookie.value);
+  await trySign(selected, props.acCur.cookie, skip);
+  await refreshState(props.acCur.cookie, props.acCur.uid);
   await TGLogger.Script("[签到任务]签到任务执行完毕");
   await TGLogger.ScriptSep("签到任务", false);
   loadScript.value = false;
   loadSign.value = false;
 }
 
-async function refreshState(ck: TGApp.App.Account.Cookie): Promise<void> {
-  if (uid.value === undefined) return;
+async function refreshState(ck: TGApp.App.Account.Cookie, uid: string): Promise<void> {
   if (signAccounts.value.length === 0) {
     await TGLogger.Script("[签到任务]未检测到游戏账户，正在获取");
     const gameResp = await takumiReq.bind.gameRoles(ck);
     if (Array.isArray(gameResp)) {
       await TGLogger.Script("[签到任务]获取游戏账户成功");
-      await TSUserAccount.game.saveAccounts(uid.value, gameResp);
-      gameAccounts.value = await TSUserAccount.game.getAccount(uid.value);
+      await TSUserAccount.game.saveAccounts(uid, gameResp);
+      gameAccounts.value = await TSUserAccount.game.getAccount(uid);
       for (const ac of gameAccounts.value) {
         const info = getGameInfo(ac.gameBiz);
         const find = signAccounts.value.find((i) => i.account === ac);
