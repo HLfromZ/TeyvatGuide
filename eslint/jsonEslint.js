@@ -1,10 +1,10 @@
 /**
  * JSON 文件的 ESLint 配置
- * @since Beta v0.9.1
+ * @since Beta v0.9.6
  */
 
 import pluginJsonc from "eslint-plugin-jsonc";
-import parserJsonc from "jsonc-eslint-parser";
+import * as parserJsonc from "jsonc-eslint-parser";
 
 const pkgJsonConfig = {
   files: ["package.json"],
