@@ -34,9 +34,9 @@
         <v-btn
           class="pbm-ne-btn"
           prepend-icon="mdi-import"
+          title="通过Yae导入（请确保导入前游戏未启动）"
           variant="elevated"
           @click="tryImportMaterial()"
-          title="通过Yae导入（请确保导入前游戏未启动）"
         >
           导入
         </v-btn>
@@ -346,7 +346,11 @@ async function tryImportMaterial(): Promise<void> {
  * 新建存档
  */
 async function createUid(): Promise<void> {
-  const uidInput = await showDialog.input("请输入新存档UID", "UID:");
+  let uidDefault: string = "";
+  if (account.value && !uidList.value.includes(Number(account.value.gameUid))) {
+    uidDefault = account.value.gameUid;
+  }
+  const uidInput = await showDialog.input("请输入新存档UID", "UID:", uidDefault);
   if (uidInput === undefined || uidInput === false) {
     showSnackbar.cancel("已取消");
     return;

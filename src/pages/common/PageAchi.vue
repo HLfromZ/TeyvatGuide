@@ -290,7 +290,11 @@ async function handleImportOuter(app: string): Promise<void> {
 }
 
 async function createUid(): Promise<void> {
-  const uidInput = await showDialog.input("请输入新存档UID", "UID:");
+  let uidDefault: string = "";
+  if (account.value && !uidList.value.includes(Number(account.value.gameUid))) {
+    uidDefault = account.value.gameUid;
+  }
+  const uidInput = await showDialog.input("请输入新存档UID", "UID:", uidDefault);
   if (uidInput === undefined || uidInput === false) {
     showSnackbar.cancel("已取消");
     return;
