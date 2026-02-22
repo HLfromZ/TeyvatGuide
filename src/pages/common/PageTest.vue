@@ -23,8 +23,6 @@
 <script lang="ts" setup>
 import VpReplyDebug from "@comp/viewPost/vp-reply-debug.vue";
 import { invoke } from "@tauri-apps/api/core";
-import { appConfigDir, resourceDir } from "@tauri-apps/api/path";
-import { copyFile, exists } from "@tauri-apps/plugin-fs";
 import { ref } from "vue";
 
 const showReply = ref<boolean>(false);
@@ -34,13 +32,8 @@ function testReply(): void {
 }
 
 async function test() {
-  await invoke("is_msix");
-  const filePath = `${await resourceDir()}\\resources\\YaeAchievementLib.dll`;
-  console.log(filePath);
-  const check = await exists(filePath);
+  const check = await invoke("is_process_running", { processName: "Yuanshen.exe" });
   console.log(check);
-  const targetPath = `${await appConfigDir()}\\YaeAchievementLib.dll`;
-  await copyFile(filePath, targetPath);
 }
 </script>
 <style lang="css" scoped>

@@ -1,6 +1,6 @@
 /**
  * 游戏文件相关功能
- * @since Beta v0.9.4
+ * @since Beta v0.9.6
  */
 
 import showDialog from "@comp/func/dialog.js";
@@ -83,7 +83,7 @@ export async function tryCopyYae(): Promise<boolean> {
 
 /**
  * 尝试调用Yae
- * @since Beta v0.9.2
+ * @since Beta v0.9.6
  * @param gameDir - 游戏目录
  * @param uid - 启动UID
  * @returns void
@@ -100,6 +100,11 @@ export async function tryCallYae(gameDir: string, uid?: string): Promise<void> {
   const gamePath = `${gameDir}${sep()}YuanShen.exe`;
   if (!(await exists(gamePath))) {
     showSnackbar.warn("未检测到游戏本体");
+    return;
+  }
+  const isRun = await invoke<boolean>("is_process_running", { processName: "Yuanshen.exe" });
+  if (isRun) {
+    showSnackbar.warn("检测到已启动的原神进程，请关闭进程（Yuanshen.exe）后重试");
     return;
   }
   const gameVer = await tryReadGameVer(gameDir);

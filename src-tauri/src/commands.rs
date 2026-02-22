@@ -218,3 +218,52 @@ pub fn is_msix() -> bool {
     }
   }
 }
+
+#[tauri::command]
+pub fn is_process_running(process_name: String) -> bool {
+  #[cfg(not(target_os = "windows"))]
+  {
+    false
+  }
+  #[cfg(target_os = "windows")]
+  {
+    use windows_sys::Win32::Foundation::{CloseHandle, HANDLE, INVALID_HANDLE_VALUE};
+    use windows_sys::Win32::System::Diagnostics::ToolHelp::{
+      CreateToolhelp32Snapshot, PROCESSENTRY32W, Process32FirstW, Process32NextW,
+      TH32CS_SNAPPROCESS,
+    };
+    unsafe {
+      // 创建进程快照
+      let snapshot: HANDLE = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+      if snapshot == INVALID_HANDLE_VALUE {
+        return false;
+      }
+
+      let mut entry: PROCESSENTRY32W = std::mem::zeroed();
+      entry.dwSize = std::mem::size_of::<PROCESSENTRY32W>() as u32;
+
+      // 遍历进程列表
+      if Process32FirstW(snapshot, &mut entry) != 0 {
+        loop {
+          // 将 exe 文件名转为 Rust String
+          let exe_name = {
+            let len = entry.szExeFile.iter().position(|&c| c == 0).unwrap_or(entry.szExeFile.len());
+            String::from_utf16_lossy(&entry.szExeFile[..len])
+          };
+
+          if exe_name.eq_ignore_ascii_case(&process_name) {
+            CloseHandle(snapshot);
+            return true;
+          }
+
+          if Process32NextW(snapshot, &mut entry) == 0 {
+            break;
+          }
+        }
+      }
+
+      CloseHandle(snapshot);
+      false
+    }
+  }
+}

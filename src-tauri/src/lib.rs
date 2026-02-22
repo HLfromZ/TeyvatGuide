@@ -14,7 +14,7 @@ mod yae;
 use crate::client::create_mhy_client;
 use crate::commands::{
   create_window, execute_js, get_dir_size, hide_main_window, init_app, is_in_admin, is_msix,
-  launch_game, quit_app, read_text_scale,
+  is_process_running, launch_game, quit_app, read_text_scale,
 };
 use tauri::{Emitter, Manager, Window, WindowEvent, generate_context, generate_handler};
 
@@ -110,6 +110,7 @@ pub fn run() {
       read_text_scale,
       launch_game,
       is_msix,
+      is_process_running,
       #[cfg(target_os = "windows")]
       yae::call_yae_dll,
       #[cfg(target_os = "windows")]
