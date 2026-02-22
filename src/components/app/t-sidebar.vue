@@ -1,4 +1,4 @@
-<!-- 应用侧边栏 TODO:样式适配 -->
+<!-- 应用侧边栏 -->
 <template>
   <v-navigation-drawer :permanent="true" :rail="rail" class="tsb-box">
     <v-list :nav="true" class="side-list" density="compact">
@@ -143,13 +143,10 @@
           </template>
         </v-list-item>
         <v-divider />
-        <v-list-item
-          v-show="isDevEnv"
-          :link="true"
-          :title.attr="'测试页面'"
-          href="/test"
-          prepend-icon="mdi-test-tube"
-        >
+        <v-list-item v-show="isDevEnv" :link="true" :title.attr="'测试页面'" href="/test">
+          <template #prepend>
+            <v-icon class="side-icon">mdi-test-tube</v-icon>
+          </template>
           <template #title>测试页面</template>
         </v-list-item>
         <v-divider v-show="isDevEnv" />
@@ -833,9 +830,9 @@ async function tryLaunchGame(): Promise<void> {
 
 .mid-menu {
   position: relative;
+  overflow: hidden auto;
   width: 100%;
   max-height: calc(100vh - 280px);
-  overflow: hidden auto;
 }
 
 .bottom-menu {
@@ -844,19 +841,22 @@ async function tryLaunchGame(): Promise<void> {
   width: 100%;
 }
 
+:deep(.side-icon.paimon + .v-list-item__spacer) {
+  width: 24px;
+}
+
 .side-icon {
   width: 24px;
   height: 24px;
-  border-radius: 5px;
-  margin-right: 32px;
-}
+  border-radius: 4px;
 
-.side-icon.paimon {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  margin-right: 24px;
-  transform: translateX(-4px);
+  &.paimon {
+    position: relative;
+    left: -4px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
 }
 
 .side-list-menu {
