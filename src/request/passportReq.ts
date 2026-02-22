@@ -110,6 +110,7 @@ async function createLoginCaptcha(
 /**
  * 创建登录二维码
  * @since Beta v0.6.8
+ * @deprecated 返回数据不符合要求
  * @returns 二维码URL
  */
 async function createQrLogin(): Promise<
@@ -214,6 +215,7 @@ async function loginByMobileCaptcha(
 /**
  * 获取登录状态
  * @since Beta v0.6.8
+ * @deprecated 返回数据不符合要求
  * @param ticket - 二维码 ticket
  * @returns 登录状态
  */

@@ -3,7 +3,7 @@
     <div class="tog-box">
       <div class="tog-top">
         <div class="tog-title">请使用米游社进行扫码操作</div>
-        <div class="tog-select" v-if="!isLauncherCode">
+        <div class="tog-select">
           <div
             class="tog-select-item"
             v-for="item in selects"
@@ -28,8 +28,7 @@
         />
       </div>
       <div class="tog-bottom" @click="share()">
-        <img src="/platforms/mhy/launcher.webp" alt="icon" v-if="isLauncherCode" />
-        <img src="/platforms/mhy/mys.webp" alt="icon" v-else />
+        <img src="/platforms/mhy/mys.webp" alt="icon" />
       </div>
     </div>
   </TOverlay>
@@ -39,8 +38,6 @@ import TOverlay from "@comp/app/t-overlay.vue";
 import showLoading from "@comp/func/loading.js";
 import showSnackbar from "@comp/func/snackbar.js";
 import hk4eReq from "@req/hk4eReq.js";
-import PassportReq from "@req/passportReq.js";
-import passportReq from "@req/passportReq.js";
 import takumiReq from "@req/takumiReq.js";
 import { generateShareImg } from "@utils/TGShare.js";
 import QrcodeVue from "qrcode.vue";
@@ -76,7 +73,6 @@ const selects: Array<ToGameLoginSelect> = [
 let cycleTimer: NodeJS.Timeout | null = null;
 
 const model = defineModel<boolean>({ default: false });
-const isLauncherCode = defineModel<boolean>("launcher", { default: true });
 const emits = defineEmits<ToGameLoginEmits>();
 const codeGid = ref<number>(7);
 const codeUrl = ref<string>();
@@ -91,8 +87,7 @@ watch(
         clearInterval(cycleTimer);
         cycleTimer = null;
       }
-      if (isLauncherCode.value) cycleTimer = setInterval(cycleGetDataLauncher, 1000);
-      else cycleTimer = setInterval(cycleGetDataGame, 1000);
+      cycleTimer = setInterval(cycleGetDataGame, 1000);
     } else {
       if (cycleTimer) clearInterval(cycleTimer);
       cycleTimer = null;
@@ -103,7 +98,6 @@ watch(
 watch(
   () => codeGid.value,
   async () => {
-    if (isLauncherCode.value) return;
     await freshQr();
     if (cycleTimer) clearInterval(cycleTimer);
     cycleTimer = setInterval(cycleGetDataGame, 1000);
@@ -120,16 +114,6 @@ async function share(): Promise<void> {
 }
 
 async function freshQr(): Promise<void> {
-  if (isLauncherCode.value) {
-    const resp = await passportReq.qrLogin.create();
-    if ("retcode" in resp) {
-      showSnackbar.error(`[${resp.retcode}] ${resp.message}`);
-      return;
-    }
-    codeUrl.value = resp.url;
-    codeTicket.value = resp.ticket;
-    return;
-  }
   const resp = await hk4eReq.loginQr.create(codeGid.value);
   if ("retcode" in resp) {
     showSnackbar.error(`[${resp.retcode}] ${resp.message}`);
@@ -137,38 +121,6 @@ async function freshQr(): Promise<void> {
   }
   codeUrl.value = resp.url;
   codeTicket.value = new URL(codeUrl.value).searchParams.get("ticket") || "";
-}
-
-async function cycleGetDataLauncher(): Promise<void> {
-  const res = await PassportReq.qrLogin.query(codeTicket.value);
-  console.log(res);
-  if ("retcode" in res) {
-    showSnackbar.error(`[${res.retcode}] ${res.message}`);
-    if (res.retcode === -106) {
-      await freshQr();
-    } else {
-      if (cycleTimer) clearInterval(cycleTimer);
-      cycleTimer = null;
-      model.value = false;
-    }
-    return;
-  }
-  if (res.status === "Created" || res.status === "Scanned") return;
-  if (res.status === "Confirmed") {
-    if (cycleTimer) clearInterval(cycleTimer);
-    cycleTimer = null;
-    const ck: TGApp.App.Account.Cookie = {
-      account_id: res.user_info.aid,
-      ltuid: res.user_info.aid,
-      stuid: res.user_info.aid,
-      mid: res.user_info.mid,
-      cookie_token: "",
-      stoken: res.tokens[0].token,
-      ltoken: "",
-    };
-    emits("success", ck);
-    model.value = false;
-  }
 }
 
 async function cycleGetDataGame(): Promise<void> {

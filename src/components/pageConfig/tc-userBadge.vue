@@ -1,5 +1,4 @@
 <template>
-  <ToGameLogin v-model="showLoginQr" v-model:launcher="isLauncherQr" @success="tryGetTokens" />
   <v-card class="tcu-box">
     <template #prepend>
       <v-avatar :image="userInfo.avatar" />
@@ -96,18 +95,11 @@
             <v-list-item-title>验证码登录✨推荐</v-list-item-title>
             <v-list-item-subtitle>使用手机号登录</v-list-item-subtitle>
           </v-list-item>
-          <v-list-item @click="tryCodeLogin(false)">
+          <v-list-item @click="tryCodeLogin()">
             <v-list-item-title>扫码登录✨推荐</v-list-item-title>
             <v-list-item-subtitle>使用米游社扫码登录</v-list-item-subtitle>
             <template #append>
               <img alt="launcher" class="menu-icon" src="/platforms/mhy/mys.webp" />
-            </template>
-          </v-list-item>
-          <v-list-item v-show="false" @click="tryCodeLogin(true)">
-            <v-list-item-title>扫码登录(启动器)</v-list-item-title>
-            <v-list-item-subtitle>使用米游社扫码登录</v-list-item-subtitle>
-            <template #append>
-              <img alt="launcher" class="menu-icon" src="/platforms/mhy/launcher.webp" />
             </template>
           </v-list-item>
           <v-list-item append-icon="mdi-account-plus" @click="addByCookie()">
@@ -118,6 +110,7 @@
       </v-menu>
     </template>
   </v-card>
+  <ToGameLogin v-model="showLoginQr" @success="tryGetTokens" />
 </template>
 <script lang="ts" setup>
 import showDialog from "@comp/func/dialog.js";
@@ -139,7 +132,6 @@ const { isLogin } = storeToRefs(useAppStore());
 const { uid, briefInfo, cookie, account } = storeToRefs(useUserStore());
 
 const showLoginQr = ref<boolean>(false);
-const isLauncherQr = ref<boolean>(true);
 const accounts = shallowRef<Array<TGApp.App.Account.User>>([]);
 const gameAccounts = shallowRef<Array<TGApp.Sqlite.Account.Game>>([]);
 const userInfo = computed<TGApp.App.Account.BriefInfo>(() => {
@@ -256,8 +248,7 @@ async function tryCaptchaLogin(): Promise<void> {
   await tryGetTokens(ck);
 }
 
-async function tryCodeLogin(isLauncher: boolean): Promise<void> {
-  isLauncherQr.value = isLauncher;
+async function tryCodeLogin(): Promise<void> {
   showLoginQr.value = true;
 }
 

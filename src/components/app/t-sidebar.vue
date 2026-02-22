@@ -351,7 +351,7 @@
     </v-list>
   </v-navigation-drawer>
   <vp-overlay-follow v-model="showFollow" />
-  <ToGameLogin v-model="showLoginQr" :launcher="false" @success="tryGetTokens" />
+  <ToGameLogin v-model="showLoginQr" @success="tryGetTokens" />
 </template>
 <script lang="ts" setup>
 import showDialog from "@comp/func/dialog.js";
