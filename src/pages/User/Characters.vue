@@ -438,6 +438,7 @@ async function refresh(): Promise<void> {
   loadData.value = true;
   await showLoading.update("正在刷新首页数据");
   const indexRes = await recordReq.index(rfCk!, rfAccount, 1);
+  console.log(indexRes);
   if ("retcode" in indexRes) {
     showSnackbar.error(`[${indexRes.retcode}] ${indexRes.message}`);
     await TGLogger.Error(JSON.stringify(indexRes));
@@ -447,6 +448,7 @@ async function refresh(): Promise<void> {
   }
   await showLoading.update("正在获取角色列表");
   const listRes = await recordReq.character.list(rfCk!, rfAccount);
+  console.log(listRes);
   if (!Array.isArray(listRes)) {
     showSnackbar.error(`[${listRes.retcode}] ${listRes.message}`);
     await TGLogger.Error(`[Character][refresh][${rfAccount.gameUid}] 获取角色列表失败`);
@@ -460,6 +462,7 @@ async function refresh(): Promise<void> {
   const idList = listRes.map((i) => i.id.toString());
   await showLoading.update(`共${idList.length}个角色，正在获取角色详情`);
   const res = await recordReq.character.detail(rfCk!, rfAccount, idList);
+  console.log(res);
   if ("retcode" in res) {
     showSnackbar.error(`[${res.retcode}] ${res.message}`);
     await TGLogger.Error(`[Character][refresh][${rfAccount.gameUid}] 获取角色数据失败`);

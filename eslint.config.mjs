@@ -2,6 +2,7 @@
  * ESLint 配置文件
  * @since Beta v0.9.3
  */
+import { defineConfig } from "eslint/config";
 import eslintPluginJsonc from "eslint-plugin-jsonc";
 import eslintPluginJs from "@eslint/js";
 import eslintPluginTs from "typescript-eslint";
@@ -11,7 +12,7 @@ import eslintConfigJson from "./eslint/jsonEslint.js";
 import eslintConfigVue from "./eslint/vueEslint.js";
 import eslintConfigYml from "./eslint/ymlEslint.js";
 
-export default [
+export default defineConfig([
   eslintPluginJs.configs.recommended,
   ...eslintPluginJsonc.configs["flat/recommended-with-jsonc"],
   ...eslintPluginTs.configs.recommended,
@@ -31,4 +32,4 @@ export default [
       ".github",
     ],
   },
-];
+]);

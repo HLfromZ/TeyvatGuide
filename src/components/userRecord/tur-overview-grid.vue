@@ -47,7 +47,11 @@
         icon="/icon/material/220005.webp"
         title="解锁传送点"
       />
-      <TurOverviewSub :text="modelValue.domainNumber" title="解锁秘境" />
+      <TurOverviewSub
+        :text="modelValue.domainNumber"
+        icon="/UI/nav/userAbyssLab.webp"
+        title="解锁秘境"
+      />
       <TurOverviewSub
         :text="modelValue.moonCulus"
         icon="/icon/material/107030.webp"
