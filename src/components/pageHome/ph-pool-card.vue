@@ -5,7 +5,7 @@
       <img v-else alt="empty" class="empty" src="/UI/app/empty.webp" />
     </div>
     <div class="ph-pool-bottom">
-      <div class="ph-pool-avatars">
+      <div v-if="avatars.length < 5" class="ph-pool-avatars">
         <div
           v-for="avatar in avatars"
           :key="avatar.url"
@@ -20,6 +20,31 @@
           <img v-else :src="avatar.icon" alt="icon" />
         </div>
       </div>
+      <Swiper
+        v-else
+        :autoplay="{ delay: 1000, disableOnInteraction: false, stopOnLastSlide: false }"
+        :centered-slides="false"
+        :loop="true"
+        :modules="swiperModules"
+        :navigation="true"
+        :slides-per-view="4"
+        :space-between="8"
+        class="ph-pool-avatars swiper"
+      >
+        <SwiperSlide
+          v-for="avatar in avatars"
+          :key="avatar.url"
+          class="ph-pool-icon"
+          @click="toAvatar(avatar)"
+        >
+          <TItemBox
+            v-if="avatar.info"
+            :model-value="getBox(avatar.info)"
+            :title="avatar.info.name"
+          />
+          <img v-else :src="avatar.icon" alt="icon" />
+        </SwiperSlide>
+      </Swiper>
       <div class="ph-pool-info">
         <div class="ph-pool-time">
           <v-icon>mdi-calendar-clock</v-icon>
@@ -36,6 +61,10 @@
   </div>
 </template>
 <script lang="ts" setup>
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
 import TItemBox, { TItemBoxData } from "@comp/app/t-itemBox.vue";
 import showSnackbar from "@comp/func/snackbar.js";
 import postReq from "@req/postReq.js";
@@ -44,6 +73,8 @@ import TGLogger from "@utils/TGLogger.js";
 import { createPost, createTGWindow } from "@utils/TGWindow.js";
 import { stamp2LastTime } from "@utils/toolFunc.js";
 import { storeToRefs } from "pinia";
+import { A11y, Autoplay } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/vue";
 import { computed, onMounted, ref, shallowRef } from "vue";
 import { useRouter } from "vue-router";
 
@@ -54,9 +85,13 @@ type PhPoolAvatar = TGApp.BBS.Obc.GachaPool & { info?: TGApp.App.Character.WikiB
 
 // eslint-disable-next-line no-undef
 let timer: NodeJS.Timeout | null = null;
-const props = defineProps<PhPoolCardProps>();
+
+const swiperModules = [Autoplay, A11y];
 const router = useRouter();
 const { poolCover } = storeToRefs(useHomeStore());
+
+const props = defineProps<PhPoolCardProps>();
+
 const cover = ref<string>();
 const endTs = ref<number>(0);
 const restTs = ref<number>(0);
@@ -222,16 +257,20 @@ async function toPool(): Promise<void> {
 }
 
 .ph-pool-avatars {
+  position: relative;
   display: flex;
-  overflow: hidden auto;
   width: auto;
   max-width: 280px;
   height: 60px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-start;
   margin: 8px;
   gap: 8px;
+
+  &.swiper {
+    width: 280px;
+  }
 
   &::-webkit-scrollbar-thumb {
     background: var(--common-shadow-t-4);
@@ -241,12 +280,6 @@ async function toPool(): Promise<void> {
 .ph-pool-icon {
   width: 60px;
   height: 60px;
-  transition: all ease-in-out 0.3s;
-
-  &:hover {
-    transform: scale(0.95);
-    transition: all ease-in-out 0.3s;
-  }
 
   img {
     position: absolute;
