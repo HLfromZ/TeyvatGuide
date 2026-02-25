@@ -1,6 +1,6 @@
 /**
  * 窗口创建相关工具函数
- * @since Beta v0.9.1
+ * @since Beta v0.9.6
  */
 
 import type { RenderCard } from "@comp/app/t-postcard.vue";
@@ -101,7 +101,7 @@ export function getWindowSize(label: string): PhysicalSize {
 
 /**
  * 窗口适配
- * @since Beta v0.9.1
+ * @since Beta v0.9.6
  * @returns 无返回值
  */
 export async function resizeWindow(): Promise<void> {
@@ -118,6 +118,9 @@ export async function resizeWindow(): Promise<void> {
   const heightScale = screen.size.height / 1080;
   const targetWidth = Math.round(designSize.width * widthScale);
   const targetHeight = Math.round(designSize.height * heightScale);
+  if (await windowCur.isMaximized()) {
+    await windowCur.unmaximize();
+  }
   await windowCur.setSize(new PhysicalSize(targetWidth, targetHeight));
   const targetZoom = Math.min(widthScale, heightScale) / (screen.scaleFactor * textScale);
   await windowCur.setZoom(targetZoom);

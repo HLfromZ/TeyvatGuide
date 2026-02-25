@@ -1,11 +1,11 @@
 /**
  * vite 配置文件
- * @since Beta v0.9.1
+ * @since Beta v0.9.6
  */
 
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import vue from "@vitejs/plugin-vue";
-// import postcssPresetEnv from "postcss-preset-env";
+import postcssPresetEnv from "postcss-preset-env";
 import { defineConfig } from "vite";
 import VueDevtools from "vite-plugin-vue-devtools";
 import vuetify from "vite-plugin-vuetify";
@@ -57,17 +57,17 @@ export default defineConfig({
     chunkSizeWarningLimit: 8192,
     sourcemap: true,
   },
-  // css: {
-  //   postcss: {
-  //     plugins: [
-  //       postcssPresetEnv({
-  //         stage: 2,
-  //         features: {
-  //           "color-function": true,
-  //           "cascade-layers": true,
-  //         },
-  //       }),
-  //     ],
-  //   },
-  // },
+  css: {
+    postcss: {
+      plugins: [
+        postcssPresetEnv({
+          stage: 2,
+          features: {
+            "color-function": true,
+            "cascade-layers": true,
+          },
+        }),
+      ],
+    },
+  },
 });
