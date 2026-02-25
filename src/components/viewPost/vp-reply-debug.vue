@@ -4,7 +4,7 @@
       <div class="tpr-debug-title">
         <span>文件：</span>
         <span :title="filePath">{{ filePath }}</span>
-        <v-btn size="small" @click="selectFile" color="primary">选择文件</v-btn>
+        <v-btn size="small" @click="selectFile" color="blue">选择文件</v-btn>
       </div>
       <div class="tpr-debug-reply">
         <TprReply mode="main" :modelValue="replyData" v-if="replyData !== null" pinId="0" />

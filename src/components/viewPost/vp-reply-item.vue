@@ -65,10 +65,10 @@
                 mode="sub"
               />
               <div v-if="isLast" class="tpr-list-item">
-                <v-chip color="info" label>没有更多了</v-chip>
+                <v-chip color="blue" label>没有更多了</v-chip>
               </div>
               <div v-else class="tpr-list-item">
-                <v-btn @click="loadSub()" color="primary" :loading="loading">加载更多</v-btn>
+                <v-btn @click="loadSub()" color="blue" :loading="loading">加载更多</v-btn>
               </div>
             </v-list>
           </v-menu>

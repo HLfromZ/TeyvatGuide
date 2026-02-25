@@ -301,6 +301,7 @@ async function tryExecAll(): Promise<void> {
 }
 
 .us-page-container {
+  position: relative;
   display: flex;
   height: calc(100vh - 100px);
   align-items: flex-start;
@@ -314,6 +315,7 @@ async function tryExecAll(): Promise<void> {
   width: 100%;
   max-height: 100%;
   box-sizing: border-box;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;

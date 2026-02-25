@@ -620,6 +620,10 @@ function handleSwitch(next: boolean): void {
   align-items: center;
   justify-content: flex-start;
   column-gap: 8px;
+
+  :deep(.v-input__control) {
+    width: 200px;
+  }
 }
 
 .uc-select-btn {

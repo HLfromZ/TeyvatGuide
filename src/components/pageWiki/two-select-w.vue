@@ -7,7 +7,7 @@
         <v-item-group v-model="selectedStar" class="two-sw-select" mandatory multiple>
           <div v-for="(item, index) in selectStarList" :key="index">
             <v-item v-slot="{ isSelected, toggle }" :value="item">
-              <v-btn :color="isSelected ? 'primary' : ''" @click="toggle">
+              <v-btn :active="isSelected" activeColor="blue" @click="toggle">
                 <v-icon>{{ isSelected ? "mdi-star" : "mdi-star-outline" }}</v-icon>
                 <span>{{ item }}星</span>
               </v-btn>
@@ -20,7 +20,7 @@
         <v-item-group v-model="selectedWeapon" class="two-sw-select" mandatory multiple>
           <div v-for="(item, index) in selectWeaponList" :key="index">
             <v-item v-slot="{ isSelected, toggle }" :value="item">
-              <v-btn :color="isSelected ? 'primary' : ''" @click="toggle">
+              <v-btn :active="isSelected" activeColor="blue" @click="toggle">
                 <img :alt="`${item}元素`" :src="`/icon/weapon/${item}.webp`" class="two-swi-icon" />
                 <span>{{ item }}</span>
               </v-btn>
@@ -134,10 +134,15 @@ function confirmSelect(): void {
   gap: 10px;
 }
 
+.dark .two-swi-icon {
+  filter: none;
+}
+
 .two-swi-icon {
   width: 30px;
   height: 30px;
   margin-right: 5px;
+  filter: grayscale(100%);
 }
 
 .tow-sc-submit {

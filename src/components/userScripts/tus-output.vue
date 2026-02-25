@@ -43,10 +43,10 @@ onUnmounted(() => {
 .tuso-box {
   position: relative;
   display: flex;
-  width: 800px;
-  min-width: 800px;
+  min-width: 400px;
   height: 100%;
   box-sizing: border-box;
+  flex: 1;
   flex-direction: column;
   padding: 12px;
   border: 1px solid var(--common-shadow-2);

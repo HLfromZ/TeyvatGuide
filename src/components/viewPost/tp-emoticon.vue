@@ -13,7 +13,7 @@
     </div>
   </div>
   <div v-else :title="props.data.insert.custom_emoticon.url" class="tp-image-load">
-    <v-progress-circular :indeterminate="true" color="primary" size="small" />
+    <v-progress-circular :indeterminate="true" color="blue" size="small" />
     <span>加载中...</span>
   </div>
   <VpOverlayImage

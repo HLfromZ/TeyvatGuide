@@ -7,7 +7,7 @@
       </div>
       <div class="tpoc-list" ref="postListRef">
         <div class="tpoc-load" v-if="postList.length === 0">
-          <v-progress-circular indeterminate color="primary" size="24" />
+          <v-progress-circular indeterminate color="blue" size="24" />
           <span>加载中...</span>
         </div>
         <TPostcard

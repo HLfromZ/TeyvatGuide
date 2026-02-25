@@ -8,7 +8,7 @@
     @click="emits('click')"
   />
   <div v-else class="progress">
-    <v-progress-circular :size="props.size" color="primary" indeterminate />
+    <v-progress-circular :size="props.size" color="blue" indeterminate />
   </div>
 </template>
 <script lang="ts" setup>

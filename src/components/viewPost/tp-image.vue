@@ -13,7 +13,7 @@
     </div>
   </div>
   <div v-else class="tp-image-load" :title="oriUrl">
-    <v-progress-circular :indeterminate="true" color="primary" size="small" />
+    <v-progress-circular :indeterminate="true" color="blue" size="small" />
     <span>加载中...</span>
   </div>
   <VpOverlayImage

@@ -24,6 +24,7 @@
           :hide-details="true"
           :single-line="true"
           append-inner-icon="mdi-magnify"
+          @click:append-inner="isSearch = true"
           density="compact"
           label="搜索"
           @keydown.enter="isSearch = true"

@@ -13,7 +13,7 @@
       <div v-else-if="gameAccounts.length === 0" class="sign-not-login">暂无游戏账户</div>
       <div v-else-if="loading" class="sign-loading">
         <div class="loading-content">
-          <v-progress-linear :model-value="loadingProgress" color="primary" height="6" rounded />
+          <v-progress-linear color="blue" :model-value="loadingProgress" height="6" rounded />
           <div class="loading-text">{{ loadingText }}</div>
         </div>
       </div>

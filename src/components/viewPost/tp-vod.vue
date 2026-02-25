@@ -8,7 +8,7 @@
     ></div>
     <div class="tp-vod-share">
       <img v-if="coverUrl" :src="coverUrl" alt="cover" class="tp-vod-cover" />
-      <v-progress-circular v-else color="primary" indeterminate size="25" />
+      <v-progress-circular v-else color="blue" indeterminate size="25" />
       <img alt="icon" class="tp-vod-icon" src="/UI/post/video_play.svg" />
       <div class="tp-vod-time">
         <v-icon size="12">mdi-clock-time-four-outline</v-icon>

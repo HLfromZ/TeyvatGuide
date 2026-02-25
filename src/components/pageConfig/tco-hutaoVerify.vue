@@ -60,7 +60,7 @@
           <v-icon icon="mdi-chevron-right" start></v-icon>
           <span>取消</span>
         </v-btn>
-        <v-btn :loading="formLoad" color="success" @click="onSubmit()">
+        <v-btn :loading="formLoad" color="green" @click="onSubmit()">
           <v-icon icon="mdi-chevron-right" start></v-icon>
           <span>确认重置</span>
         </v-btn>

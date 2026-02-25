@@ -7,7 +7,7 @@
         <v-item-group v-model="selectedStar" class="two-sc-select" multiple>
           <div v-for="(item, index) in selectStarList" :key="index">
             <v-item v-slot="{ isSelected, toggle }" :value="item">
-              <v-btn :color="isSelected ? 'primary' : ''" @click="toggle">
+              <v-btn :active="isSelected" activeColor="blue" @click="toggle">
                 <v-icon>{{ isSelected ? "mdi-star" : "mdi-star-outline" }}</v-icon>
                 <span>{{ item }}星</span>
               </v-btn>
@@ -20,8 +20,12 @@
         <v-item-group v-model="selectedWeapon" class="two-sc-select" multiple>
           <div v-for="(item, index) in selectWeaponList" :key="index">
             <v-item v-slot="{ isSelected, toggle }" :value="item">
-              <v-btn :color="isSelected ? 'primary' : ''" @click="toggle">
-                <img :alt="`${item}`" :src="`/icon/weapon/${item}.webp`" class="two-sci-icon" />
+              <v-btn :active="isSelected" activeColor="blue" @click="toggle">
+                <img
+                  :alt="`${item}`"
+                  :src="`/icon/weapon/${item}.webp`"
+                  class="two-sci-icon weapon"
+                />
                 <span>{{ item }}</span>
               </v-btn>
             </v-item>
@@ -33,7 +37,7 @@
         <v-item-group v-model="selectedElements" class="two-sc-select" multiple>
           <div v-for="(item, index) in selectElementList" :key="index">
             <v-item v-slot="{ isSelected, toggle }" :value="item">
-              <v-btn :color="isSelected ? 'primary' : ''" class="element-btn" @click="toggle">
+              <v-btn :active="isSelected" activeColor="blue" class="element-btn" @click="toggle">
                 <img
                   :alt="`${item}元素`"
                   :src="`/icon/element/${item}元素.webp`"
@@ -50,7 +54,7 @@
         <v-item-group v-model="selectedArea" class="two-sc-select" multiple>
           <div v-for="(item, index) in selectAreaList" :key="index">
             <v-item v-slot="{ isSelected, toggle }" :value="item">
-              <v-btn :color="isSelected ? 'primary' : ''" @click="toggle">
+              <v-btn :active="isSelected" activeColor="blue" @click="toggle">
                 <v-icon>{{ isSelected ? "mdi-check" : "mdi-checkbox-blank-outline" }}</v-icon>
                 <span>{{ item }}</span>
               </v-btn>
@@ -202,10 +206,18 @@ function confirmSelect() {
   gap: 10px;
 }
 
+.dark .two-sci-icon.weapon {
+  filter: none;
+}
+
 .two-sci-icon {
   width: 30px;
   height: 30px;
   margin-right: 5px;
+
+  &.weapon {
+    filter: invert(0.5);
+  }
 }
 
 .tow-sc-submit {
