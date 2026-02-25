@@ -46,63 +46,24 @@
           </template>
         </v-list-item>
         <v-divider />
-        <!-- 游戏数据，包括战绩&角色&祈愿 -->
-        <v-menu :offset="[8, 0]" :open-on-click="true" location="end">
-          <template #activator="{ props }">
-            <v-list-item :title.attr="'游戏数据'" v-bind="props">
-              <template #title>游戏数据</template>
-              <template #prepend>
-                <img alt="gameLab" class="side-icon" src="/UI/nav/gameRecord.webp" />
-              </template>
-            </v-list-item>
+        <v-list-item :link="true" :title.attr="'原神战绩'" href="/user/record">
+          <template #title>原神战绩</template>
+          <template #prepend>
+            <img alt="record" class="side-icon-menu" src="/UI/nav/userRecord.webp" />
           </template>
-          <v-list :nav="true" class="side-list-menu sub" density="compact">
-            <v-list-item
-              :link="true"
-              :title.attr="'原神战绩'"
-              class="side-item-menu"
-              href="/user/record"
-            >
-              <template #title>原神战绩</template>
-              <template #prepend>
-                <img alt="record" class="side-icon-menu" src="/UI/nav/userRecord.webp" />
-              </template>
-            </v-list-item>
-            <v-list-item
-              :link="true"
-              :title.attr="'角色列表'"
-              class="side-item-menu"
-              href="/user/characters"
-            >
-              <template #title>角色列表</template>
-              <template #prepend>
-                <img alt="characters" class="side-icon-menu" src="/UI/nav/userAvatar.webp" />
-              </template>
-            </v-list-item>
-            <v-list-item
-              :link="true"
-              :title.attr="'祈愿记录'"
-              class="side-item-menu"
-              href="/user/gacha"
-            >
-              <template #title>祈愿记录</template>
-              <template #prepend>
-                <img alt="gacha" class="side-icon-menu" src="/UI/nav/userGacha.webp" />
-              </template>
-            </v-list-item>
-            <v-list-item
-              :link="true"
-              :title.attr="'颂愿记录'"
-              class="side-item-menu"
-              href="/user/gachaB"
-            >
-              <template #title>颂愿记录</template>
-              <template #prepend>
-                <img alt="gachaB" class="side-icon-menu" src="/icon/nation/千星奇域.webp" />
-              </template>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+        </v-list-item>
+        <v-list-item :link="true" :title.attr="'角色列表'" href="/user/characters">
+          <template #title>角色列表</template>
+          <template #prepend>
+            <img alt="characters" class="side-icon-menu" src="/UI/nav/userAvatar.webp" />
+          </template>
+        </v-list-item>
+        <v-list-item :link="true" :title.attr="'祈愿记录'" href="/user/gacha">
+          <template #title>祈愿记录</template>
+          <template #prepend>
+            <img alt="gacha" class="side-icon-menu" src="/UI/nav/userGacha.webp" />
+          </template>
+        </v-list-item>
         <!-- 高难挑战，包括深渊&剧诗&危战 -->
         <v-menu :offset="[8, 0]" :open-on-click="true" location="end">
           <template #activator="{ props }">
