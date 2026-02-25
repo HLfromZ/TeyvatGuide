@@ -13,7 +13,7 @@
       <!-- 4星相关数据 -->
       <div :class="{ 'has-up': isUpPool }" class="gro-mid-list">
         <div class="gro-ml-title s4">★★★★</div>
-        <div class="gro-ml-card">
+        <div class="gro-ml-card reset" title="点击切换垫数显示" @click="switchShowReset()">
           <span>垫</span>
           <span>{{ reset4count - 1 }}</span>
         </div>
@@ -33,7 +33,7 @@
       <!-- 5星相关数据 -->
       <div :class="{ 'has-up': star5UpAvg !== '' }" class="gro-mid-list">
         <div class="gro-ml-title s5">★★★★★</div>
-        <div class="gro-ml-card">
+        <div class="gro-ml-card reset" title="点击切换垫数显示" @click="switchShowReset()">
           <span>垫</span>
           <span>{{ reset5count - 1 }}</span>
         </div>
@@ -66,7 +66,7 @@
       <v-window v-model="tab" class="gro-bottom-window">
         <v-window-item class="gro-b-window-item" value="5">
           <GroDataReset
-            v-if="props.dataType !== 'new'"
+            v-if="props.dataType !== 'new' && showReset"
             :count="reset5count - 1"
             :gacha="props.dataType"
             compute="5"
@@ -84,7 +84,7 @@
         </v-window-item>
         <v-window-item class="gro-b-window-item" value="4">
           <GroDataReset
-            v-if="props.dataType !== 'new'"
+            v-if="props.dataType !== 'new' && showReset"
             :count="reset4count - 1"
             :gacha="props.dataType"
             compute="4"
@@ -147,6 +147,7 @@ const startDate = ref<string>(""); // 最早的时间
 const endDate = ref<string>(""); // 最晚的时间
 const star5List = shallowRef<Array<GroDataLineProps>>([]); // 5星物品数据
 const star4List = shallowRef<Array<GroDataLineProps>>([]); // 4星物品数据
+const showReset = ref<boolean>(true);
 const reset5count = ref<number>(1); // 5星垫抽数量
 const reset4count = ref<number>(1); // 4星垫抽数量
 const star3count = ref<number>(0); // 3星物品数量
@@ -190,7 +191,27 @@ onUnmounted(() => {
     resizeListener = null;
   }
 });
-
+// 监听数据变化
+watch(
+  () => props.dataVal,
+  async () => {
+    star5List.value = [];
+    star4List.value = [];
+    reset5count.value = 1;
+    reset4count.value = 1;
+    star3count.value = 1;
+    startDate.value = "";
+    endDate.value = "";
+    star5avg.value = "";
+    star5UpAvg.value = "";
+    star4avg.value = "";
+    star4UpAvg.value = "";
+    tab.value = "5";
+    loadData();
+    await nextTick();
+    calculateHeights();
+  },
+);
 watch(
   () => [props.dataVal, props.dataType],
   async () => {
@@ -198,6 +219,11 @@ watch(
     calculateHeights();
   },
 );
+
+// 切换垫数显示
+function switchShowReset(): void {
+  showReset.value = !showReset.value;
+}
 
 function loadData(): void {
   title.value = getTitle();
@@ -330,28 +356,6 @@ function getPg(star: "5" | "4" | "3"): string {
   if (progress === 0) return "0";
   return `${progress.toFixed(2)}%`;
 }
-
-// 监听数据变化
-watch(
-  () => props.dataVal,
-  async () => {
-    star5List.value = [];
-    star4List.value = [];
-    reset5count.value = 1;
-    reset4count.value = 1;
-    star3count.value = 1;
-    startDate.value = "";
-    endDate.value = "";
-    star5avg.value = "";
-    star5UpAvg.value = "";
-    star4avg.value = "";
-    star4UpAvg.value = "";
-    tab.value = "5";
-    loadData();
-    await nextTick();
-    calculateHeights();
-  },
-);
 </script>
 <style lang="scss" scoped>
 .gro-dv-container {
@@ -424,6 +428,10 @@ watch(
   border-radius: 4px;
   background: var(--app-page-bg);
   column-gap: 4px;
+
+  &.reset {
+    cursor: pointer;
+  }
 }
 
 .gro-mid-progress {
