@@ -4,6 +4,18 @@
     <div ref="headerRef" class="gro-dv-header">
       <div class="gro-dvt-title">
         <span>{{ title }}</span>
+        <GroResetCard
+          v-if="props.dataType !== 'new'"
+          :count="reset5count - 1"
+          :gacha="props.dataType"
+          compute="5"
+        />
+        <GroResetCard
+          v-if="props.dataType !== 'new'"
+          :count="reset4count - 1"
+          :gacha="props.dataType"
+          compute="4"
+        />
         <span>{{ props.dataVal.length }}</span>
       </div>
       <div class="gro-dvt-subtitle">
@@ -13,7 +25,7 @@
       <!-- 4星相关数据 -->
       <div :class="{ 'has-up': isUpPool }" class="gro-mid-list">
         <div class="gro-ml-title s4">★★★★</div>
-        <div class="gro-ml-card reset" title="点击切换垫数显示" @click="switchShowReset()">
+        <div class="gro-ml-card">
           <span>垫</span>
           <span>{{ reset4count - 1 }}</span>
         </div>
@@ -33,7 +45,7 @@
       <!-- 5星相关数据 -->
       <div :class="{ 'has-up': star5UpAvg !== '' }" class="gro-mid-list">
         <div class="gro-ml-title s5">★★★★★</div>
-        <div class="gro-ml-card reset" title="点击切换垫数显示" @click="switchShowReset()">
+        <div class="gro-ml-card">
           <span>垫</span>
           <span>{{ reset5count - 1 }}</span>
         </div>
@@ -65,12 +77,6 @@
       </v-tabs>
       <v-window v-model="tab" class="gro-bottom-window">
         <v-window-item class="gro-b-window-item" value="5">
-          <GroDataReset
-            v-if="props.dataType !== 'new' && showReset"
-            :count="reset5count - 1"
-            :gacha="props.dataType"
-            compute="5"
-          />
           <v-virtual-scroll :item-height="48" :items="star5List">
             <template #default="{ item }">
               <GroDataLine
@@ -83,12 +89,6 @@
           </v-virtual-scroll>
         </v-window-item>
         <v-window-item class="gro-b-window-item" value="4">
-          <GroDataReset
-            v-if="props.dataType !== 'new' && showReset"
-            :count="reset4count - 1"
-            :gacha="props.dataType"
-            compute="4"
-          />
           <v-virtual-scroll :item-height="48" :items="star4List">
             <template #default="{ item }">
               <GroDataLine
@@ -120,7 +120,7 @@ import {
 } from "vue";
 
 import GroDataLine, { type GroDataLineProps } from "./gro-data-line.vue";
-import GroDataReset from "./gro-data-reset.vue";
+import GroResetCard from "./gro-reset-card.vue";
 
 import { AppGachaData } from "@/data/index.js";
 
@@ -147,7 +147,6 @@ const startDate = ref<string>(""); // 最早的时间
 const endDate = ref<string>(""); // 最晚的时间
 const star5List = shallowRef<Array<GroDataLineProps>>([]); // 5星物品数据
 const star4List = shallowRef<Array<GroDataLineProps>>([]); // 4星物品数据
-const showReset = ref<boolean>(true);
 const reset5count = ref<number>(1); // 5星垫抽数量
 const reset4count = ref<number>(1); // 4星垫抽数量
 const star3count = ref<number>(0); // 3星物品数量
@@ -219,11 +218,6 @@ watch(
     calculateHeights();
   },
 );
-
-// 切换垫数显示
-function switchShowReset(): void {
-  showReset.value = !showReset.value;
-}
 
 function loadData(): void {
   title.value = getTitle();
@@ -375,10 +369,15 @@ function getPg(star: "5" | "4" | "3"): string {
   display: flex;
   width: 100%;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   color: var(--common-text-title);
+  column-gap: 8px;
   font-family: var(--font-title);
   font-size: 18px;
+
+  :last-child {
+    margin-left: auto;
+  }
 }
 
 .gro-dvt-subtitle {
