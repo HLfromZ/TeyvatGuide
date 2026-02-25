@@ -124,5 +124,4 @@ export async function resizeWindow(): Promise<void> {
   await windowCur.setSize(new PhysicalSize(targetWidth, targetHeight));
   const targetZoom = Math.min(widthScale, heightScale) / (screen.scaleFactor * textScale);
   await windowCur.setZoom(targetZoom);
-  await windowCur.setFocus();
 }
