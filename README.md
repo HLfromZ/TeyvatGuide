@@ -2,14 +2,14 @@
 Author: 目棃
 Description: 说明文档
 Date: 2023-03-05
-Update: 2026-02-08
+Update: 2026-02-25
 ---
 
 > 本文档 [`Frontmatter`](https://github.com/BTMuli/MuCli#Frontmatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于 `2023-03-05 14:41:55`
 >
-> 更新于 `2026-02-08 14:37:31`
+> 更新于 `2026-02-25 19:28:26`
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/BTMuli/TeyvatGuide)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/BTMuli/TeyvatGuide) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FBTMuli%2FTeyvatGuide.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FBTMuli%2FTeyvatGuide?ref=badge_shield)
 
 [![](https://img.shields.io/github/last-commit/BTMuli/TeyvatGuide)](https://github.com/BTMuli/TeyvatGuide/commits) [![](https://img.shields.io/github/commits-since/BTMuli/TeyvatGuide/latest?include_prereleases)](https://github.com/BTMuli/TeyvatGuide/commits)
 
@@ -138,6 +138,8 @@ Game Tool for Genshin Impact player, supports Windows and macOS.
 应用版本号遵循 [Semantic Versioning 2.0.0](https://semver.org/lang/zh-CN/) 规范。
 
 隐私政策：[Privacy](https://app.btmuli.ink/docs/TeyvatGuide/privacy.html)
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FBTMuli%2FTeyvatGuide.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FBTMuli%2FTeyvatGuide?ref=badge_large)
 
 ## 鸣谢 / Thanks
 
