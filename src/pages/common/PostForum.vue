@@ -21,30 +21,20 @@
         <template #selection="{ item }">
           <div class="select-item main">
             <TMiImg
-              v-if="item.raw.icon"
-              :alt="item.raw.text"
+              v-if="item.icon"
+              :alt="item.text"
               :ori="true"
-              :src="item.raw.icon"
-              :title="item.raw.text"
+              :src="item.icon"
+              :title="item.text"
               class="icon"
             />
-            <span>{{ item.raw.text }}</span>
+            <span>{{ item.text }}</span>
           </div>
         </template>
         <template #item="{ props, item }">
-          <div
-            :class="{ selected: item.raw.gid === curGid }"
-            class="select-item sub"
-            v-bind="props"
-          >
-            <TMiImg
-              v-if="item.raw.icon"
-              :alt="item.raw.text"
-              :ori="true"
-              :src="item.raw.icon"
-              class="icon"
-            />
-            <span>{{ item.raw.text }}</span>
+          <div :class="{ selected: item.gid === curGid }" class="select-item sub" v-bind="props">
+            <TMiImg v-if="item.icon" :alt="item.text" :ori="true" :src="item.icon" class="icon" />
+            <span>{{ item.text }}</span>
           </div>
         </template>
       </v-select>
@@ -59,25 +49,19 @@
       >
         <template #selection="{ item }">
           <div class="select-item main">
-            <TMiImg
-              :alt="item.raw.text"
-              :ori="true"
-              :src="item.raw.icon"
-              :title="item.raw.text"
-              class="icon"
-            />
-            <span>{{ item.raw.text }}</span>
+            <TMiImg :alt="item.text" :ori="true" :src="item.icon" :title="item.text" class="icon" />
+            <span>{{ item.text }}</span>
           </div>
         </template>
         <template #item="{ props, item }">
           <div
-            :class="{ selected: item.raw.value === selectedForum?.value }"
+            :class="{ selected: item.value === selectedForum?.value }"
             class="select-item sub"
             v-bind="props"
-            @click="selectedForum = item.raw"
+            @click="() => (selectedForum = item)"
           >
-            <TMiImg :alt="item.raw.text" :ori="true" :src="item.raw.icon" class="icon" />
-            <span>{{ item.raw.text }}</span>
+            <TMiImg :alt="item.text" :ori="true" :src="item.icon" class="icon" />
+            <span>{{ item.text }}</span>
           </div>
         </template>
       </v-select>

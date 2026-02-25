@@ -62,7 +62,7 @@ import { computed } from "vue";
 
 import TuaRelicBox from "./tua-relic-box.vue";
 
-import { AppCharacterData } from "@/data/index.js";
+import { AppCalendarData, AppCharacterData } from "@/data/index.js";
 
 type fixedLenArr<T, N extends number> = [T, ...Array<T>] & { length: N };
 type AvatarRelics = fixedLenArr<TGApp.Game.Avatar.Relic | false, 5>;
@@ -74,7 +74,9 @@ const userStore = useUserStore();
 const avatarIcon = computed<string>(() => {
   const costume = getCostume();
   if (costume) return `/WIKI/costume/${costume.id}.webp`;
-  return `/WIKI/character/${props.role.avatar.id}.webp`;
+  const findA = AppCalendarData.find((a) => a.id === props.role.avatar.id);
+  if (findA) return `/WIKI/character/${props.role.avatar.id}.webp`;
+  return props.role.avatar.icon;
 });
 const avatarBox = computed<TItemBoxData>(() => ({
   size: "100px",
@@ -90,20 +92,25 @@ const avatarBox = computed<TItemBoxData>(() => ({
   display: "inner",
   clickable: true,
 }));
-const weaponBox = computed<TItemBoxData>(() => ({
-  size: "65px",
-  height: "65px",
-  bg: `/icon/bg/${props.role.weapon.rarity}-Star.webp`,
-  icon: `/WIKI/weapon/${props.role.weapon.id}.webp`,
-  lt: `/icon/weapon/${props.role.weapon.type_name}.webp`,
-  ltSize: "20px",
-  rt: props.role.weapon.affix_level.toString(),
-  rtSize: "20px",
-  innerText: props.role.weapon.name,
-  innerHeight: 20,
-  display: "inner",
-  clickable: true,
-}));
+const weaponBox = computed<TItemBoxData>(() => {
+  let icon = props.role.weapon.icon;
+  const findW = AppCalendarData.find((w) => w.id === props.role.weapon.id);
+  if (findW) icon = `/WIKI/weapon/${props.role.weapon.id}.webp`;
+  return {
+    size: "65px",
+    height: "65px",
+    bg: `/icon/bg/${props.role.weapon.rarity}-Star.webp`,
+    icon: icon,
+    lt: `/icon/weapon/${props.role.weapon.type_name}.webp`,
+    ltSize: "20px",
+    rt: props.role.weapon.affix_level.toString(),
+    rtSize: "20px",
+    innerText: props.role.weapon.name,
+    innerHeight: 20,
+    display: "inner",
+    clickable: true,
+  };
+});
 const relicsBox = computed<AvatarRelics>(() => {
   const relics = props.role.relics;
   return [
@@ -146,7 +153,7 @@ function getWeaponTitle(): string {
   title.push(`${weapon.rarity}星 精炼${weapon.affix_level} Lv.${weapon.level}`);
   const propMain = userStore.getProp(weapon.main_property.property_type);
   title.push(`${propMain !== false ? propMain.name : "未知属性"} - ${weapon.main_property.final}`);
-  if (weapon.sub_property !== null) {
+  if (weapon.sub_property !== undefined && weapon.sub_property !== null) {
     const propSub = userStore.getProp(weapon.sub_property.property_type);
     title.push(`${propSub !== false ? propSub.name : "未知属性"} - ${weapon.sub_property.final}`);
   }

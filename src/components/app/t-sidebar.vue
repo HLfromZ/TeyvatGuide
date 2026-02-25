@@ -9,7 +9,7 @@
       />
       <div class="mid-menu">
         <!-- 菜单项 -->
-        <v-list-item :link="true" :title.attr="'首页'" href="/">
+        <v-list-item :link="true" :title.attr="'首页'" class="thin-spacer" href="/">
           <template #title>首页</template>
           <template #prepend>
             <img alt="homeIcon" class="side-icon paimon" src="/UI/nav/paimon.webp" />
@@ -206,7 +206,7 @@
         <!-- 用户菜单 -->
         <v-menu :open-on-click="true" location="end">
           <template #activator="{ props }">
-            <v-list-item :title.attr="userInfo.nickname" v-bind="props">
+            <v-list-item :title.attr="userInfo.nickname" class="thin-spacer" v-bind="props">
               <template #title>{{ userInfo.nickname }}</template>
               <template #prepend>
                 <img :src="userInfo.avatar" alt="userIcon" class="side-icon paimon" />
@@ -812,8 +812,10 @@ async function tryLaunchGame(): Promise<void> {
   }
 }
 </script>
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .tsb-box {
+  --v-list-prepend-gap: 24px;
+
   position: relative;
   background: var(--app-side-bg);
   color: var(--app-side-content);
@@ -841,8 +843,8 @@ async function tryLaunchGame(): Promise<void> {
   width: 100%;
 }
 
-:deep(.side-icon.paimon + .v-list-item__spacer) {
-  width: 24px;
+.thin-spacer {
+  --v-list-prepend-gap: 16px;
 }
 
 .side-icon {

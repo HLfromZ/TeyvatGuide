@@ -1,6 +1,6 @@
 /**
  * 全局样式文件
- * @since Beta v0.9.1
+ * @since Beta v0.9.6
  */
 
 @use "fonts/index";
@@ -57,15 +57,15 @@
   --tgi-snackbar: 9999;
 }
 
-/*
- * @description 根 html 样式
- * @since Beta v0.3.0
+/**
+ * 根 html 样式
+ * @since Beta v0.9.6
  */
 
 html {
   overflow: auto;
   background: var(--app-page-bg);
-  font-family: var(--font-text);
+  font-family: var(--font-text) !important;
   font-size: 16px;
 }
 

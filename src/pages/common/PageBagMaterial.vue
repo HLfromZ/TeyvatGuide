@@ -64,7 +64,7 @@
           <template #item="{ props, item }">
             <v-list-item v-bind="props">
               <template #append>
-                <v-chip>{{ item.raw.number }}</v-chip>
+                <v-chip>{{ item.number }}</v-chip>
               </template>
             </v-list-item>
           </template>

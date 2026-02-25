@@ -16,7 +16,7 @@
         variant="outlined"
       >
         <template v-slot:item="{ props, item }">
-          <v-list-item :subtitle="item.raw.desc" :title="item.raw.title" v-bind="props" />
+          <v-list-item :subtitle="item.desc" :title="item.title" v-bind="props" />
         </template>
       </v-select>
     </div>

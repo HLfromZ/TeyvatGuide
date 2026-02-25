@@ -16,30 +16,30 @@
           <template #selection="{ item }">
             <div class="select-item main">
               <TMiImg
-                v-if="item.raw.icon"
-                :alt="item.raw.title"
+                v-if="item.icon"
+                :alt="item.title"
                 :ori="true"
-                :src="item.raw.icon"
-                :title="item.raw.title"
+                :src="item.icon"
+                :title="item.title"
                 class="icon"
               />
-              <span>{{ item.raw.title }}</span>
+              <span>{{ item.title }}</span>
             </div>
           </template>
           <template #item="{ props, item }">
             <div
-              :class="item.raw.gid === curGid ? 'selected' : ''"
+              :class="item.gid === curGid ? 'selected' : ''"
               class="select-item sub"
               v-bind="props"
             >
               <TMiImg
-                v-if="item.raw.icon"
-                :alt="item.raw.title"
-                :src="item.raw.icon"
-                :title="item.raw.title"
+                v-if="item.icon"
+                :alt="item.title"
+                :src="item.icon"
+                :title="item.title"
                 class="icon"
               />
-              <span>{{ item.raw.title }}</span>
+              <span>{{ item.title }}</span>
             </div>
           </template>
         </v-select>

@@ -32,25 +32,25 @@
         <template #selection="{ item }">
           <div class="select-item main">
             <img
-              v-if="item.raw.icon"
-              :alt="item.raw.name"
-              :src="item.raw.icon"
-              :title="item.raw.name"
+              v-if="item.icon"
+              :alt="item.name"
+              :src="item.icon"
+              :title="item.name"
               class="icon"
             />
-            <span>{{ item.raw.name }}</span>
+            <span>{{ item.name }}</span>
           </div>
         </template>
         <template #item="{ props, item }">
-          <div :class="{ selected: item.raw.id === curGid }" class="select-item sub" v-bind="props">
+          <div :class="{ selected: item.id === curGid }" class="select-item sub" v-bind="props">
             <img
-              v-if="item.raw.icon"
-              :alt="item.raw.name"
-              :src="item.raw.icon"
-              :title="item.raw.name"
+              v-if="item.icon"
+              :alt="item.name"
+              :src="item.icon"
+              :title="item.name"
               class="icon"
             />
-            <span>{{ item.raw.name }}</span>
+            <span>{{ item.name }}</span>
           </div>
         </template>
       </v-select>

@@ -5,7 +5,7 @@
       <slot name="left"></slot>
       <div class="pbom-box">
         <div class="pbom-share">
-          {{ dbInfo.updated }} | UID {{ props.uid }} | TeyvatGuide v{{ version }}
+          ID {{ props.data.info.id }} | UID {{ props.uid }} | TeyvatGuide v{{ version }}
         </div>
         <div class="pbom-top">
           <div class="pbom-icon">
@@ -81,7 +81,7 @@ const showRecord = computed<boolean>(() => !SKIP_BAG_TYPES.includes(props.data.i
 onMounted(async () => (version.value = await getVersion()));
 
 const dbInfo = shallowRef<TGApp.Sqlite.UserBag.MaterialTable>(props.data.tb);
-
+console.log(dbInfo.value);
 watch(
   () => props.data.info,
   async () => await refreshDb(),

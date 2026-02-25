@@ -18,19 +18,19 @@
         >
           <template #selection="{ item }">
             <div class="select-main">
-              <img :src="item.raw.brief.avatar" alt="icon" />
+              <img :src="item.brief.avatar" alt="icon" />
               <div class="content">
-                <span>{{ item.raw.brief.nickname }}</span>
-                <span>UID:{{ item.raw.uid }}</span>
+                <span>{{ item.brief.nickname }}</span>
+                <span>UID:{{ item.uid }}</span>
               </div>
             </div>
           </template>
           <template #item="{ props, item }">
             <div class="select-item" v-bind="props">
-              <img :src="item.raw.brief.avatar" alt="icon" />
+              <img :src="item.brief.avatar" alt="icon" />
               <div class="content">
-                <span>{{ item.raw.brief.nickname }}</span>
-                <span>UID:{{ item.raw.uid }}</span>
+                <span>{{ item.brief.nickname }}</span>
+                <span>UID:{{ item.uid }}</span>
               </div>
             </div>
           </template>
