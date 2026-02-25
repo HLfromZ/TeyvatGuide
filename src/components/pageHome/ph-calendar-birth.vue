@@ -111,6 +111,7 @@ async function toNews(): Promise<void> {
 .pcb-top-none {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   column-gap: 8px;
@@ -179,6 +180,7 @@ async function toNews(): Promise<void> {
 .pcb-item-title {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   column-gap: 8px;
   font-family: var(--font-title);
   font-size: 20px;

@@ -23,10 +23,12 @@
           </div>
           <div class="dialog-btn-box">
             <button class="dialog-btn no-btn" @click="handleCancel">
-              {{ data.cancelLabel }}
+              <span>></span>
+              <span>{{ data.cancelLabel }}</span>
             </button>
             <button class="dialog-btn ok-btn" @click="handleConfirm">
-              {{ data.confirmLabel }}
+              <span>></span>
+              <span>{{ data.confirmLabel }}</span>
             </button>
           </div>
           <div v-if="!!data.otcancel" class="dialog-close-btn" title="关闭" @click="handleOuter">
@@ -243,25 +245,28 @@ defineExpose({ displayInputBox, displayCheckBox });
 .dialog-box {
   position: relative;
   display: flex;
-  width: 520px;
-  height: 240px;
+  min-width: 400px;
+  max-width: 560px;
+  min-height: 160px;
+  max-height: 240px;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
+  padding: 8px;
   border: 1px solid var(--common-shadow-1);
-  border-radius: 15px;
+  border-radius: 8px;
   background: var(--dialog-bg);
-  box-shadow: 0 0 10px var(--common-shadow-t-1);
+  box-shadow: 0 0 10px var(--common-shadow-t-2);
   color: var(--tgc-yellow-3);
 }
 
 .dialog-title {
   width: 100%;
+  padding-bottom: 4px;
   border-bottom: 1px solid var(--dialog-title);
   color: var(--dialog-title);
   font-family: var(--font-title);
-  font-size: 30px;
+  font-size: 24px;
   text-align: center;
 }
 
@@ -269,7 +274,7 @@ defineExpose({ displayInputBox, displayCheckBox });
   overflow: hidden;
   width: 100%;
   font-family: var(--font-text);
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
   text-overflow: ellipsis;
   white-space: pre-wrap;
@@ -291,29 +296,42 @@ defineExpose({ displayInputBox, displayCheckBox });
   height: 100%;
   padding: 5px;
   border: 1px solid var(--dialog-title);
-  border-radius: 5px;
+  border-radius: 4px;
   background: inherit;
   color: var(--dialog-title);
+
+  &:focus {
+    border: 1px solid var(--tgc-yellow-3);
+    outline: none;
+  }
 }
 
 .dialog-btn-box {
+  position: relative;
   display: flex;
   width: 100%;
-  align-items: flex-end;
-  justify-content: space-around;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+  column-gap: 12px;
 }
 
 .dialog-btn {
   position: relative;
   display: flex;
-  width: 180px;
-  height: 60px;
   align-items: center;
   justify-content: center;
-  border-radius: 15px;
+  padding: 4px 8px;
+  border: unset;
+  border-radius: 4px;
+  background: unset;
+  column-gap: 8px;
   cursor: pointer;
-  font-family: var(--font-title);
-  font-size: 20px;
+  font-size: 14px;
+
+  span:first-child {
+    font-weight: bold;
+  }
 }
 
 .dialog-close-btn {
@@ -325,8 +343,11 @@ defineExpose({ displayInputBox, displayCheckBox });
   height: 24px;
   align-items: center;
   justify-content: center;
+  padding-bottom: 3px;
+  padding-left: 1px;
+  border: 1px solid var(--common-shadow-1);
   border-radius: 50%;
-  background: var(--dialog-title);
+  background: var(--dialog-bg);
   color: var(--tgc-yellow-3);
   cursor: pointer;
   font-family: var(--font-title);
@@ -337,10 +358,18 @@ defineExpose({ displayInputBox, displayCheckBox });
 }
 
 .no-btn {
-  border: 1px solid var(--tgc-yellow-1);
+  color: var(--tgc-od-white);
+
+  &:hover {
+    background: var(--common-shadow-1);
+  }
 }
 
 .ok-btn {
-  background: var(--dialog-title);
+  color: var(--box-text-1);
+
+  &:hover {
+    background: var(--common-shadow-2);
+  }
 }
 </style>

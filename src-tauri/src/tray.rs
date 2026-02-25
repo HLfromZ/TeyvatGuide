@@ -24,6 +24,7 @@ pub fn create_tray<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<()> {
   let show_item = MenuItemBuilder::with_id("show", "显示窗口").build(app)?;
   let separator = PredefinedMenuItem::separator(app)?;
   let quit_item = MenuItemBuilder::with_id("quit", "退出应用").build(app)?;
+  // TODO: 窗口回正&最大化
 
   let menu = MenuBuilder::new(app).item(&show_item).item(&separator).item(&quit_item).build()?;
 
