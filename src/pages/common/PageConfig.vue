@@ -351,6 +351,10 @@ async function confirmShare(): Promise<void> {
     showSnackbar.error("阈值必须为数字!");
     return;
   }
+  if (Number(input) <= 0 || Number(input) !== Math.round(Number(input))) {
+    showSnackbar.warn("请输入正整数");
+    return;
+  }
   if (Number(input) === shareDefaultFile.value) {
     showSnackbar.cancel("未修改分享设置");
     return;
