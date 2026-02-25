@@ -274,12 +274,12 @@ async function handleResizeListen(event: Event<string>): Promise<void> {
   const webview = webviewWindow.getCurrentWebviewWindow();
   if (event.payload !== "false") {
     await resizeWindow();
+    await win.center();
   } else {
     const size = getWindowSize(webview.label);
     await win.setSize(new LogicalSize(size.width, size.height));
     await webview.setZoom(1);
   }
-  await win.center();
 }
 
 // 启动后只执行一次的监听
