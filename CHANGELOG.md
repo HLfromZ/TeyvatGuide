@@ -2,12 +2,32 @@
 Author: 目棃
 Description: CHANGELOG
 Date: 2025-09-09
-Update: 2026-02-08
+Update: 2026-02-25
 ---
 
 > 本文档 [`Frontmatter`](https://github.com/BTMuli/MuCli#Frontmatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于 `2025-09-09 14:30:56`
 >
-> 更新于 `2026-02-08 14:32:58`
+> 更新于 `2026-02-25 23:50:25`
+
+## [0.9.6](https://github.com/BTMuli/TeyvatGuide/releases/v0.9.6) (2026-02-26)
+
+- 🍱 更新6.4版本资源
+- ✨ 剧诗页新增绘想游迹&月谕圣牌浮窗
+- 👽️ 升级 UI 框架至 Vuetify4
+- ♻️ 重构多页面用户数据加载&刷新逻辑，大幅提升多账号用户体验
+- 🐛 修复浮窗高度异常抖动导致的子回复加载异常
+- 🐛 修复特定条件下的渲染异常
+- 🐛 完善分享设置输入校验，剔除非正整数输入
+- 🚸 版本更新后重置反馈按钮显示
+- 🚸 调用内置YAE时检测游戏本体是否启动
+- 🚸 更换祈愿字典数据源，由Hakushi变更为Yatta
+- 🚸 替换帖子卡片版块图标数据源，修复可能出现的版块图标渲染异常
+- 🚸 优化回正相关处理
+- 💄 调整侧边栏，溢出滚动
+- 💄 帖子详情显示 `vod` 组件占位
+- 💄 当存在战绩数据时角色列表用户信息采用对应数据进行渲染
+- 💄 首页限时祈愿组件卡池角色超过4个时采用Swiper进行轮播
+- 💄 调整 Snackbar 层级 [`#218`](https://github.com/BTMuli/TeyvatGuide/issues/218)
 
 ## [0.9.5](https://github.com/BTMuli/TeyvatGuide/releases/v0.9.5) (2026-02-08)
 
