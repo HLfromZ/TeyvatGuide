@@ -6,10 +6,10 @@
         <img alt="icon" src="/UI/nav/toolbox.webp" />
         <span>实用脚本</span>
         <v-select
-          v-model="curAccount"
           :disabled="runScript || runAll"
           :hide-details="true"
           :items="accounts"
+          :model-value="curAccount"
           class="us-top-select"
           density="compact"
           item-title="uid"
@@ -17,18 +17,18 @@
           variant="outlined"
         >
           <template #selection="{ item }">
-            <div class="select-main">
+            <div class="us-select-main">
               <img :src="item.brief.avatar" alt="icon" />
-              <div class="content">
+              <div class="us-sm-content">
                 <span>{{ item.brief.nickname }}</span>
                 <span>UID:{{ item.uid }}</span>
               </div>
             </div>
           </template>
           <template #item="{ props, item }">
-            <div class="select-item" v-bind="props">
+            <div class="us-select-item" v-bind="props" @click="() => (curAccount = item)">
               <img :src="item.brief.avatar" alt="icon" />
-              <div class="content">
+              <div class="us-si-content">
                 <span>{{ item.brief.nickname }}</span>
                 <span>UID:{{ item.uid }}</span>
               </div>
@@ -224,7 +224,7 @@ async function tryExecAll(): Promise<void> {
   max-width: 250px;
 }
 
-.select-main {
+.us-select-main {
   position: relative;
   display: flex;
   height: 24px;
@@ -236,24 +236,24 @@ async function tryExecAll(): Promise<void> {
     width: 24px;
     height: 24px;
   }
+}
 
-  .content {
-    position: relative;
-    display: flex;
-    flex-direction: column;
+.us-sm-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
 
-    :first-child {
-      font-family: var(--font-title);
-      font-size: 12px;
-    }
+  :first-child {
+    font-family: var(--font-title);
+    font-size: 12px;
+  }
 
-    :last-child {
-      font-size: 10px;
-    }
+  :last-child {
+    font-size: 10px;
   }
 }
 
-.select-item {
+.us-select-item {
   position: relative;
   display: flex;
   width: 100%;
@@ -262,33 +262,38 @@ async function tryExecAll(): Promise<void> {
   justify-content: flex-start;
   padding: 8px;
   column-gap: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--common-shadow-1);
+  }
 
   img {
     width: 24px;
     height: 24px;
   }
+}
 
-  .content {
-    position: relative;
-    display: flex;
-    flex-direction: column;
+.us-si-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
 
-    :first-child {
-      font-family: var(--font-title);
-      font-size: 12px;
-    }
-
-    :last-child {
-      font-size: 10px;
-    }
+  :first-child {
+    font-family: var(--font-title);
+    font-size: 12px;
   }
 
-  .append {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
+  :last-child {
+    font-size: 10px;
   }
+}
+
+.append {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
 }
 
 .top-hint {
