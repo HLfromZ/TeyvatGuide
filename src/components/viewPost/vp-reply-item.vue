@@ -1,9 +1,9 @@
 <template>
-  <div class="tpr-reply-box" :id="replyId">
+  <div ref="VpReplyRef" class="tpr-reply-box">
     <div
-      class="tpr-bubble"
       v-if="props.modelValue.user.reply_bubble !== null"
       :title="props.modelValue.user.reply_bubble.name"
+      class="tpr-bubble"
     >
       <TMiImg :ori="true" :src="props.modelValue.user.reply_bubble.url" alt="bubble" />
     </div>
@@ -12,11 +12,11 @@
         <div class="avatar">
           <TMiImg :ori="true" :src="getUserAvatar(props.modelValue.user)" alt="avatar" />
         </div>
-        <div class="pendant" v-if="props.modelValue.user.pendant !== ''">
+        <div v-if="props.modelValue.user.pendant !== ''" class="pendant">
           <TMiImg :ori="true" :src="props.modelValue.user.pendant" alt="pendant" />
         </div>
       </div>
-      <div class="tpru-right" :title="props.modelValue.user.nickname">
+      <div :title="props.modelValue.user.nickname" class="tpru-right">
         <span>{{ props.modelValue.user.nickname }}</span>
         <span class="level">Lv.{{ props.modelValue.user.level_exp.level }}</span>
         <span v-if="props.modelValue.is_lz" class="tpru-lz">楼主</span>
@@ -33,7 +33,7 @@
         <span>{{ props.modelValue.user.ip_region }}</span>
       </div>
       <div class="tpri-right">
-        <span title="点赞数" class="tpr-like">
+        <span class="tpr-like" title="点赞数">
           <v-icon size="small">mdi-thumb-up</v-icon>
           {{ props.modelValue.stat.like_num }}
         </span>
@@ -46,16 +46,16 @@
           <v-icon size="small">mdi-message-text</v-icon>
           <span>{{ props.modelValue.sub_reply_count }}</span>
           <v-menu
-            submenu
+            v-model="showSub"
+            :close-on-content-click="false"
             activator="parent"
             location="end"
-            :close-on-content-click="false"
-            v-model="showSub"
+            submenu
           >
             <v-list
               class="tpr-reply-sub"
-              width="300px"
               max-height="400px"
+              width="300px"
               @scroll="handleSubScroll"
             >
               <VpReplyItem
@@ -68,25 +68,25 @@
                 <v-chip color="blue" label>没有更多了</v-chip>
               </div>
               <div v-else class="tpr-list-item">
-                <v-btn @click="loadSub()" color="blue" :loading="loading">加载更多</v-btn>
+                <v-btn :loading="loading" color="blue" @click="loadSub()">加载更多</v-btn>
               </div>
             </v-list>
           </v-menu>
         </span>
       </div>
     </div>
-    <div class="tpr-extra" :title="`ID:${props.modelValue.reply.reply_id}`">
-      <div class="tpr-share" @click="share" data-html2canvas-ignore title="分享">
+    <div :title="`ID:${props.modelValue.reply.reply_id}`" class="tpr-extra">
+      <div class="tpr-share" data-html2canvas-ignore title="分享" @click="share">
         <v-icon size="small">mdi-share-variant</v-icon>
       </div>
       <span
-        class="tpr-pin"
         v-if="props.mode === 'main' && props.modelValue.reply.reply_id === props.pinId"
+        class="tpr-pin"
       >
         <v-icon size="small">mdi-pin</v-icon>
         <span>置顶评论</span>
       </span>
-      <span class="tpr-debug" @click="exportData" data-html2canvas-ignore title="导出数据">
+      <span class="tpr-debug" data-html2canvas-ignore title="导出数据" @click="exportData">
         <v-icon size="small">mdi-file-export</v-icon>
       </span>
       <span v-if="props.modelValue.r_user" class="tpr-reply-user">
@@ -115,7 +115,16 @@ import { save } from "@tauri-apps/plugin-dialog";
 import { writeTextFile } from "@tauri-apps/plugin-fs";
 import { generateShareImg } from "@utils/TGShare.js";
 import { getNearTime, getUserAvatar, timestampToDate } from "@utils/toolFunc.js";
-import { computed, onMounted, onUnmounted, ref, shallowRef, toRaw, watch } from "vue";
+import {
+  computed,
+  onMounted,
+  onUnmounted,
+  ref,
+  shallowRef,
+  toRaw,
+  useTemplateRef,
+  watch,
+} from "vue";
 
 import TpParser from "./tp-parser.vue";
 
@@ -124,18 +133,20 @@ type TprReplyProps =
   | { mode: "main"; modelValue: TGApp.BBS.Reply.ReplyFull; pinId?: string };
 
 const props = defineProps<TprReplyProps>();
-const replyId = `reply_${props.modelValue.reply.post_id}_${props.modelValue.reply.floor_id}_${props.modelValue.reply.reply_id}`;
+const replyLabel = `reply_${props.modelValue.reply.post_id}_${props.modelValue.reply.floor_id}_${props.modelValue.reply.reply_id}`;
 let subListener: UnlistenFn | null = null;
 let closeSubListener: UnlistenFn | null = null;
 
 console.log("TprReply", toRaw(props.modelValue));
+
+const existingIds = new Set<string>();
 
 const showSub = ref<boolean>(false);
 const lastId = ref<string>();
 const isLast = ref<boolean>(false);
 const loading = ref<boolean>(false);
 const subReplies = shallowRef<Array<TGApp.BBS.Reply.ReplyFull>>([]);
-const existingIds = new Set<string>();
+const vpReplyEl = useTemplateRef<HTMLDivElement>("VpReplyRef");
 const levelColor = computed<string>(() => {
   const level = props.modelValue.user.level_exp.level;
   if (level < 5) return "var(--tgc-od-green)";
@@ -196,9 +207,11 @@ function handleSubScroll(e: globalThis.Event): void {
 }
 
 async function share(): Promise<void> {
-  const replyDom = document.querySelector<HTMLElement>(`#${replyId}`);
-  if (replyDom === null) return;
-  await generateShareImg(replyId, replyDom, 3);
+  if (!vpReplyEl.value) {
+    showSnackbar.warn("未找到分享Dom");
+    return;
+  }
+  await generateShareImg(replyLabel, vpReplyEl.value, 3);
 }
 
 async function showReply(): Promise<void> {
@@ -252,7 +265,7 @@ async function exportData(): Promise<void> {
   const savePath = await save({
     title: "导出回复数据",
     filters: [{ name: "JSON", extensions: ["json"] }],
-    defaultPath: `${await path.downloadDir()}${path.sep()}${replyId}.json`,
+    defaultPath: `${await path.downloadDir()}${path.sep()}${replyLabel}.json`,
   });
   if (savePath === null) {
     showSnackbar.cancel("已取消");
