@@ -1,6 +1,6 @@
 /**
  * 主题样式文件-深色主题
- * @since v0.8.9
+ * @since v0.9.7
  */
 
 /* dark mode */
@@ -11,6 +11,7 @@ html.dark {
   --app-page-content: #d0d0d0ff;
   --app-side-bg: #151c26ff;
   --app-side-content: #ddddddff;
+  --app-scroll-bg: var(--tgc-od-white);
 
   /* box container */
   --box-bg-1: #21252bff;

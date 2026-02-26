@@ -68,7 +68,7 @@ import useBBSStore from "@store/bbs.js";
 import TGLogger from "@utils/TGLogger.js";
 import { createPost } from "@utils/TGWindow.js";
 import { storeToRefs } from "pinia";
-import { computed, onMounted, reactive, Ref, ref, shallowRef, watch } from "vue";
+import { computed, onMounted, reactive, type Ref, ref, shallowRef, watch } from "vue";
 import { useRoute } from "vue-router";
 
 type PostData = Record<TGApp.BBS.Post.NewsTypeEnum, Ref<Array<TGApp.BBS.Post.FullData>>>;

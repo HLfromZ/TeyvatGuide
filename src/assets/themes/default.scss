@@ -1,6 +1,6 @@
 /**
  * 主题样式文件-默认（浅色）主题
- * @since v0.8.9
+ * @since v0.9.7
  */
 
 /* default(light) theme */
@@ -11,6 +11,7 @@ html.default {
   --app-page-content: #2f2f2fff;
   --app-side-bg: #f2f2f2ff;
   --app-side-content: #222222ff;
+  --app-scroll-bg: var(--tgc-yellow-3);
 
   /* box container */
   --box-bg-1: #f9f6f2ff;
