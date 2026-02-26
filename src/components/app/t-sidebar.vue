@@ -49,19 +49,19 @@
         <v-list-item :link="true" :title.attr="'原神战绩'" href="/user/record">
           <template #title>原神战绩</template>
           <template #prepend>
-            <img alt="record" class="side-icon-menu" src="/UI/nav/userRecord.webp" />
+            <img alt="record" class="side-icon" src="/UI/nav/userRecord.webp" />
           </template>
         </v-list-item>
         <v-list-item :link="true" :title.attr="'角色列表'" href="/user/characters">
           <template #title>角色列表</template>
           <template #prepend>
-            <img alt="characters" class="side-icon-menu" src="/UI/nav/userAvatar.webp" />
+            <img alt="characters" class="side-icon" src="/UI/nav/userAvatar.webp" />
           </template>
         </v-list-item>
         <v-list-item :link="true" :title.attr="'祈愿记录'" href="/user/gacha">
           <template #title>祈愿记录</template>
           <template #prepend>
-            <img alt="gacha" class="side-icon-menu" src="/UI/nav/userGacha.webp" />
+            <img alt="gacha" class="side-icon" src="/UI/nav/userGacha.webp" />
           </template>
         </v-list-item>
         <!-- 高难挑战，包括深渊&剧诗&危战 -->
