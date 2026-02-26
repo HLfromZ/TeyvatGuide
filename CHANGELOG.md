@@ -2,12 +2,20 @@
 Author: 目棃
 Description: CHANGELOG
 Date: 2025-09-09
-Update: 2026-02-25
+Update: 2026-02-26
 ---
 
 > 本文档 [`Frontmatter`](https://github.com/BTMuli/MuCli#Frontmatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于 `2025-09-09 14:30:56`
 >
-> 更新于 `2026-02-25 23:50:25`
+> 更新于 `2026-02-26 18:31:44`
+
+## [0.9.7](https://github.com/BTMuli/TeyvatGuide/releases/v0.9.7) (2026-02-26)
+
+- 🐛 修复脚本页面账号切换异常
+- 🚸 调整游戏安装目录选取逻辑，调整大小写处理 [`#219`](https://github.com/BTMuli/TeyvatGuide/issues/219)
+- 💄 替换部分侧边栏图标
+- 💄 调整浅色模式下滚动条可见度
+- 💄 调整部分页面UI
 
 ## [0.9.6](https://github.com/BTMuli/TeyvatGuide/releases/v0.9.6) (2026-02-26)
 
