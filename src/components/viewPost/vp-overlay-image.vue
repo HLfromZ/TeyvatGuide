@@ -8,36 +8,36 @@
       <div class="tpoi-bottom">
         <template v-if="typeof props.image.insert.image !== 'string'">
           <div class="tpoi-info">
-            <p class="tpoi-info-item">
+            <span class="tpoi-info-item">
               <span>大小：</span>
               <span>{{ bytesToSize(Number(props.image.insert.image.size) ?? 0) }}</span>
-            </p>
-            <p class="tpoi-info-item">
+            </span>
+            <span class="tpoi-info-item">
               <span>尺寸：</span>
               <span>
                 {{ props.image.insert.image.width }}x{{ props.image.insert.image.height }}
               </span>
-            </p>
-            <p class="tpoi-info-item">
+            </span>
+            <span class="tpoi-info-item">
               <span>格式：</span>
               <span>{{ format }}</span>
-            </p>
+            </span>
           </div>
         </template>
         <template v-else-if="props.image.attributes">
           <div class="tpoi-info">
-            <p v-if="props.image.attributes.size" class="tpoi-info-item">
+            <span v-if="props.image.attributes.size" class="tpoi-info-item">
               <span>大小：</span>
               <span>{{ bytesToSize(props.image.attributes.size ?? 0) }}</span>
-            </p>
-            <p class="tpoi-info-item">
+            </span>
+            <span class="tpoi-info-item">
               <span>尺寸：</span>
               <span>{{ props.image.attributes.width }}x{{ props.image.attributes.height }}</span>
-            </p>
-            <p class="tpoi-info-item">
+            </span>
+            <span class="tpoi-info-item">
               <span>格式：</span>
               <span>{{ format }}</span>
-            </p>
+            </span>
           </div>
         </template>
         <div class="tpoi-tools">
