@@ -145,7 +145,7 @@ async function confirmCGD(): Promise<void> {
   const oriEmpty = gameDir.value === "未设置";
   const editCheck = await showDialog.check(
     oriEmpty ? "确认设置游戏目录？" : "确认修改游戏目录？",
-    oriEmpty ? "请选择 Yuanshen.exe 所在目录" : `当前：${gameDir.value}`,
+    oriEmpty ? "请选择 YuanShen.exe 所在目录" : `当前：${gameDir.value}`,
   );
   if (!editCheck) {
     showSnackbar.cancel(oriEmpty ? "已取消设置" : "已取消修改");
@@ -159,11 +159,14 @@ async function confirmCGD(): Promise<void> {
     showSnackbar.warn("路径不能为空!");
     return;
   }
-  if (!file.endsWith("YuanShen.exe")) {
+  if (!file.toLowerCase().endsWith("yuanshen.exe")) {
     showSnackbar.warn("请选中游戏本体(YuanShen.exe)");
     return;
   }
-  if (!oriEmpty && `${gameDir.value}${path.sep()}YuanShen.exe` === file) {
+  if (
+    !oriEmpty &&
+    `${gameDir.value}${path.sep()}YuanShen.exe`.toLowerCase() === file.toLowerCase()
+  ) {
     showSnackbar.warn("路径未修改！");
     return;
   }

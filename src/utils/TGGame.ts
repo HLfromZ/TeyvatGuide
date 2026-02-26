@@ -7,7 +7,14 @@ import showDialog from "@comp/func/dialog.js";
 import showSnackbar from "@comp/func/snackbar.js";
 import { invoke } from "@tauri-apps/api/core";
 import { documentDir, resourceDir, sep } from "@tauri-apps/api/path";
-import { copyFile, exists, mkdir, readTextFile, readTextFileLines } from "@tauri-apps/plugin-fs";
+import {
+  copyFile,
+  exists,
+  mkdir,
+  readDir,
+  readTextFile,
+  readTextFileLines,
+} from "@tauri-apps/plugin-fs";
 import { platform } from "@tauri-apps/plugin-os";
 import TGLogger from "@utils/TGLogger.js";
 
@@ -97,11 +104,13 @@ export async function tryCallYae(gameDir: string, uid?: string): Promise<void> {
     showSnackbar.warn("请前往设置页面设置游戏安装目录");
     return;
   }
-  const gamePath = `${gameDir}${sep()}YuanShen.exe`;
-  if (!(await exists(gamePath))) {
+  const dirRead = await readDir(gameDir);
+  const find = dirRead.find((i) => i.isFile && i.name.toLowerCase() === "yuanshen.exe");
+  if (!find) {
     showSnackbar.warn("未检测到游戏本体");
     return;
   }
+  const gamePath = `${gameDir}${sep()}${find.name}`;
   const isRun = await invoke<boolean>("is_process_running", { processName: "Yuanshen.exe" });
   if (isRun) {
     showSnackbar.warn("检测到已启动的原神进程，请关闭进程（Yuanshen.exe）后重试");

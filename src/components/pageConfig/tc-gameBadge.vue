@@ -2,7 +2,7 @@
   <div class="tgb-box">
     <div class="tgb-top">
       <div class="tgb-title">✨原神，启动！</div>
-      <v-btn size="small" icon="mdi-rocket" variant="outlined" @click="tryPlayGame()" />
+      <v-btn icon="mdi-rocket" size="small" variant="outlined" @click="tryPlayGame()" />
     </div>
     <v-list-item v-if="account.uid">
       <v-list-item-title class="tgb-name">
@@ -22,7 +22,7 @@ import useAppStore from "@store/app.js";
 import useUserStore from "@store/user.js";
 import { path } from "@tauri-apps/api";
 import { invoke } from "@tauri-apps/api/core";
-import { exists } from "@tauri-apps/plugin-fs";
+import { readDir } from "@tauri-apps/plugin-fs";
 import TGLogger from "@utils/TGLogger.js";
 import { storeToRefs } from "pinia";
 
@@ -42,11 +42,13 @@ async function tryPlayGame(): Promise<void> {
     showSnackbar.warn("未设置游戏安装目录！");
     return;
   }
-  const gamePath = `${gameDir.value}${path.sep()}YuanShen.exe`;
-  if (!(await exists(gamePath))) {
+  const dirRead = await readDir(gameDir.value);
+  const find = dirRead.find((i) => i.isFile && i.name.toLowerCase() === "yuanshen.exe");
+  if (!find) {
     showSnackbar.warn("未检测到原神本体应用！");
     return;
   }
+  const gamePath = `${gameDir.value}${path.sep()}${find.name}`;
   const resp = await passportReq.authTicket(account.value, cookie.value);
   if (typeof resp !== "string") {
     showSnackbar.error(`[${resp.retcode}] ${resp.message}`);

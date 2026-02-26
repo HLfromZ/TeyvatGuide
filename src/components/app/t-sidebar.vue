@@ -330,7 +330,7 @@ import useUserStore from "@store/user.js";
 import { event, path, webviewWindow } from "@tauri-apps/api";
 import { invoke } from "@tauri-apps/api/core";
 import type { Event, UnlistenFn } from "@tauri-apps/api/event";
-import { exists } from "@tauri-apps/plugin-fs";
+import { readDir } from "@tauri-apps/plugin-fs";
 import mhyClient from "@utils/TGClient.js";
 import { isRunInAdmin, tryCopyYae, tryReadGameVer, YAE_GAME_VER } from "@utils/TGGame.js";
 import TGLogger from "@utils/TGLogger.js";
@@ -729,11 +729,17 @@ async function tryLaunchGame(): Promise<void> {
     showSnackbar.warn("请先登录！");
     return;
   }
-  const gamePath = `${gameDir.value}${path.sep()}YuanShen.exe`;
-  if (!(await exists(gamePath))) {
+  if (gameDir.value === "未设置") {
+    showSnackbar.warn("请前往设置页面设置游戏安装目录");
+    return;
+  }
+  const dirRead = await readDir(gameDir.value);
+  const find = dirRead.find((i) => i.isFile && i.name.toLowerCase() === "yuanshen.exe");
+  if (!find) {
     showSnackbar.warn("未检测到原神本体应用！");
     return;
   }
+  const gamePath = `${gameDir.value}${path.sep()}${find.name}`;
   const resp = await passportReq.authTicket(account.value, cookie.value);
   if (typeof resp !== "string") {
     showSnackbar.error(`[${resp.retcode}] ${resp.message}`);
