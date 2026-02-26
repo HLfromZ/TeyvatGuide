@@ -607,6 +607,7 @@ async function switchIncognito(): Promise<void> {
   flex-direction: column;
   flex-shrink: 0;
   justify-content: flex-start;
+  padding-right: 4px;
   row-gap: 8px;
 }
 </style>

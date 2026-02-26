@@ -89,6 +89,7 @@ async function toDonate(): Promise<void> {
   display: flex;
   width: 100%;
   flex-direction: column;
+  flex-shrink: 0;
   align-items: flex-start;
   justify-content: flex-start;
   padding: 8px;
