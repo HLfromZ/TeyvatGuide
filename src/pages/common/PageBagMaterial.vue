@@ -3,7 +3,7 @@
   <v-app-bar>
     <template #prepend>
       <div class="pbm-nav-prepend">
-        <img alt="icon" src="/icon/material/121234.webp" />
+        <img alt="icon" src="/UI/nav/userBag.webp" />
         <span>背包材料</span>
         <v-select
           v-model="curUid"

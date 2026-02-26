@@ -42,7 +42,7 @@
         <v-list-item :link="true" :title.attr="'背包材料'" href="/bag/material">
           <template #title>背包材料</template>
           <template #prepend>
-            <img alt="materialBagIcon" class="side-icon" src="/icon/material/121234.webp" />
+            <img alt="materialBagIcon" class="side-icon" src="/UI/nav/userBag.webp" />
           </template>
         </v-list-item>
         <v-divider />
@@ -182,7 +182,7 @@
               @click="openClient('sign_in')"
             >
               <template #prepend>
-                <img alt="sing_in" class="side-icon-menu" src="/UI/nav/userGacha.webp" />
+                <img alt="sing_in" class="side-icon-menu" src="/UI/nav/subSign.webp" />
               </template>
             </v-list-item>
             <v-list-item
@@ -192,7 +192,7 @@
               @click="openClient('game_record')"
             >
               <template #prepend>
-                <img alt="game_record" class="side-icon-menu" src="/UI/nav/userRecord.webp" />
+                <img alt="game_record" class="side-icon-menu" src="/UI/nav/subRecord.webp" />
               </template>
             </v-list-item>
             <v-list-item
