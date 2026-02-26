@@ -70,9 +70,8 @@ import showSnackbar from "@comp/func/snackbar.js";
 import TGSqlite from "@Sql/index.js";
 import useAppStore from "@store/app.js";
 import { path } from "@tauri-apps/api";
-import { sep } from "@tauri-apps/api/path";
 import { open } from "@tauri-apps/plugin-dialog";
-import { exists, readDir, remove } from "@tauri-apps/plugin-fs";
+import { readDir, remove } from "@tauri-apps/plugin-fs";
 import { openPath } from "@tauri-apps/plugin-opener";
 import { platform } from "@tauri-apps/plugin-os";
 import { backUpUserData } from "@utils/dataBS.js";
@@ -152,25 +151,23 @@ async function confirmCGD(): Promise<void> {
     showSnackbar.cancel(oriEmpty ? "已取消设置" : "已取消修改");
     return;
   }
-  const dir: string | null = await open({
-    directory: true,
-    defaultPath: oriEmpty ? undefined : gameDir.value,
+  const file: string | null = await open({
+    defaultPath: oriEmpty ? undefined : `${gameDir.value}${path.sep()}YuanShen.exe`,
     multiple: false,
   });
-  if (dir === null) {
+  if (file === null) {
     showSnackbar.warn("路径不能为空!");
     return;
   }
-  if (!oriEmpty && gameDir.value === dir) {
+  if (!file.endsWith("YuanShen.exe")) {
+    showSnackbar.warn("请选中游戏本体(YuanShen.exe)");
+    return;
+  }
+  if (!oriEmpty && `${gameDir.value}${path.sep()}YuanShen.exe` === file) {
     showSnackbar.warn("路径未修改！");
     return;
   }
-  // 校验是否存在游戏本体
-  if (!(await exists(`${dir}${path.sep()}YuanShen.exe`))) {
-    showSnackbar.warn("未检测到游戏本体");
-    return;
-  }
-  gameDir.value = dir;
+  gameDir.value = file.substring(0, file.lastIndexOf(path.sep()));
   showSnackbar.success(oriEmpty ? "成功设置游戏目录" : "成功修改游戏目录");
 }
 
@@ -204,7 +201,7 @@ async function confirmCLD(): Promise<void> {
   await showLoading.start("正在清理日志文件...");
   for (const file of delFiles) {
     await showLoading.update(`正在清理 ${file.name}`);
-    const filePath = `${logDir.value}${sep()}${file.name}`;
+    const filePath = `${logDir.value}${path.sep()}${file.name}`;
     await remove(filePath);
   }
   await new Promise<void>((resolve) => setTimeout(resolve, 1000));
