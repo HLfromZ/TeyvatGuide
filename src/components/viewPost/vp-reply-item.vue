@@ -293,6 +293,7 @@ async function handleUser(): Promise<void> {
   border: 1px solid var(--common-shadow-1);
   border-radius: 4px;
   background: var(--box-bg-1);
+  color: var(--app-page-content);
   word-break: break-all;
 }
 
