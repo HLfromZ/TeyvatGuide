@@ -4,7 +4,7 @@
     <template #prepend>
       <div class="pa-prepend">
         <v-tabs v-model="tab" align-tabs="start" class="pa-tabs">
-          <v-tab v-for="tab in tabList" :key="tab.id" :value="tab.id" :title="tab.name">
+          <v-tab v-for="tab in tabList" :key="tab.id" :title="tab.name" :value="tab.id">
             {{ tab.mi18n_name }}
           </v-tab>
         </v-tabs>
@@ -37,22 +37,15 @@
     <template #append>
       <div class="anno-top-append">
         <v-btn
-          class="anno-btn"
-          prepend-icon="mdi-bullhorn"
-          rounded
-          variant="elevated"
-          @click="switchNews"
-        >
-          切换米游社资讯
-        </v-btn>
-        <v-btn
           v-if="isLogin"
           class="anno-btn"
+          prepend-icon="mdi-web"
+          rounded
           size="small"
           variant="elevated"
           @click="showIframe()"
         >
-          <v-icon>mdi-web</v-icon>
+          游戏内公告
         </v-btn>
       </div>
     </template>
@@ -82,7 +75,6 @@ import useAppStore from "@store/app.js";
 import TGLogger from "@utils/TGLogger.js";
 import { storeToRefs } from "pinia";
 import { onMounted, ref, shallowRef, watch } from "vue";
-import { useRouter } from "vue-router";
 
 type AnnoSelect<T = string> = { text: string; value: T };
 
@@ -92,7 +84,6 @@ const langList: ReadonlyArray<AnnoSelect<TGApp.Game.Anno.AnnoLangEnum>> =
   gameEnum.anno.langList.map((i) => ({ text: gameEnum.anno.langDesc(i), value: i }));
 
 const { server, lang, isLogin } = storeToRefs(useAppStore());
-const router = useRouter();
 
 const tab = ref<number>(0);
 const tabList = shallowRef<Array<TGApp.Game.Anno.ListType>>([]);
@@ -157,11 +148,6 @@ async function loadData(): Promise<void> {
   detailList.value = await hk4eReq.anno.detail(server.value, gameEnum.anno.lang.CHS);
   await showLoading.end();
   isReq.value = false;
-}
-
-async function switchNews(): Promise<void> {
-  await TGLogger.Info("[Announcements][switchNews] 切换米游社资讯");
-  await router.push("/news/2");
 }
 </script>
 <style lang="scss" scoped>

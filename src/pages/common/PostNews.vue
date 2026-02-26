@@ -40,16 +40,6 @@
       <v-btn class="post-news-btn" size="small" variant="elevated" @click="handleList()">
         <v-icon>mdi-view-list</v-icon>
       </v-btn>
-      <v-btn
-        v-if="gid === '2'"
-        class="post-news-btn"
-        prepend-icon="mdi-bullhorn"
-        rounded
-        variant="elevated"
-        @click="switchAnno"
-      >
-        切换游戏内公告
-      </v-btn>
     </template>
   </v-app-bar>
   <v-window v-model="recentNewsType">
@@ -62,7 +52,7 @@
     </v-window-item>
   </v-window>
   <ToChannel v-model="showList" :gid="gid" />
-  <VpOverlaySearch v-model="showSearch" :gid="gid" :keyword="search" />
+  <VpOverlaySearch v-model="showSearch" :gid="Number(gid)" :keyword="search" />
 </template>
 <script lang="ts" setup>
 import TPostCard from "@comp/app/t-postcard.vue";
@@ -79,13 +69,12 @@ import TGLogger from "@utils/TGLogger.js";
 import { createPost } from "@utils/TGWindow.js";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, reactive, Ref, ref, shallowRef, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 
 type PostData = Record<TGApp.BBS.Post.NewsTypeEnum, Ref<Array<TGApp.BBS.Post.FullData>>>;
 type RawItem = { isLast: boolean; name: string; lastId: number };
 type RawData = Record<TGApp.BBS.Post.NewsTypeEnum, Ref<RawItem>>;
 
-const router = useRouter();
 const { recentNewsType } = storeToRefs(useAppStore());
 const { gameList } = storeToRefs(useBBSStore());
 const { gid } = <{ gid: string }>useRoute().params;
@@ -157,11 +146,6 @@ async function firstLoad(refresh: boolean = false): Promise<void> {
     `获取${label.value}${rawData[key].name}数据成功，共 ${getData.list.length} 条`,
   );
   loading.value = false;
-}
-
-async function switchAnno(): Promise<void> {
-  await TGLogger.Info(`[News][${gid}][switchAnno] 切换公告`);
-  await router.push("/announcements");
 }
 
 function handleList(): void {
