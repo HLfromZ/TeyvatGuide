@@ -117,8 +117,9 @@ async function toOuter(item?: TGApp.App.Weapon.WikiBriefInfo): Promise<void> {
 }
 
 .ww-left {
+  position: relative;
   display: flex;
-  width: fit-content;
+  flex: 3;
   flex-direction: column;
   flex-shrink: 0;
   gap: 8px;
@@ -148,13 +149,14 @@ async function toOuter(item?: TGApp.App.Weapon.WikiBriefInfo): Promise<void> {
   width: 100%;
   padding-right: 8px;
   gap: 8px;
-  grid-template-columns: repeat(3, 160px);
+  grid-template-columns: repeat(auto-fill, minmax(144px, 1fr));
 }
 
 .ww-detail {
   position: relative;
   width: 100%;
   box-sizing: border-box;
+  flex: 5;
   padding: 8px;
   border-radius: 4px;
   box-shadow: 0 0 4px var(--common-shadow-2);

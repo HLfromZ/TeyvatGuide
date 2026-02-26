@@ -18,7 +18,7 @@
           </div>
           <div class="twc-bi-desc">{{ data.description }}</div>
         </div>
-        <div class="twc-bi-grid1">
+        <div class="twc-bi-grid">
           <div class="twc-big-item">
             <span>{{ data.elePrefix }}</span>
             <span>{{ data.element }}</span>
@@ -40,7 +40,7 @@
             <span>{{ data.brief.birth }}</span>
           </div>
         </div>
-        <div class="twc-bi-grid2">
+        <div class="twc-bi-grid">
           <div class="twc-big-item">
             <span>汉语CV</span>
             <span>{{ data.brief.cv.cn }}</span>
@@ -182,7 +182,7 @@ async function toBirth(date: string): Promise<void> {
   await router.push({ name: "留影叙佳期", params: { date: birth } });
 }
 </script>
-<style lang="css" scoped>
+<style lang="scss" scoped>
 :deep(.v-expansion-panel-title) {
   background: var(--common-shadow-1);
 }
@@ -191,7 +191,7 @@ async function toBirth(date: string): Promise<void> {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  row-gap: 10px;
+  row-gap: 8px;
 }
 
 .twc-brief {
@@ -201,7 +201,9 @@ async function toBirth(date: string): Promise<void> {
 }
 
 .twc-brief-info {
+  position: relative;
   display: flex;
+  width: 100%;
   flex-direction: column;
   justify-content: space-between;
 }
@@ -212,8 +214,10 @@ async function toBirth(date: string): Promise<void> {
 }
 
 .twc-bi-title {
+  position: relative;
   display: flex;
   width: fit-content;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   color: var(--common-text-title);
@@ -240,16 +244,12 @@ async function toBirth(date: string): Promise<void> {
   opacity: 0.8;
 }
 
-.twc-bi-grid1 {
-  display: grid;
-  column-gap: 10px;
-  grid-template-columns: repeat(4, 1fr);
-}
-
-.twc-bi-grid2 {
-  display: grid;
-  column-gap: 10px;
-  grid-template-columns: repeat(2, 1fr);
+.twc-bi-grid {
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  column-gap: 16px;
 }
 
 .twc-big-item {
