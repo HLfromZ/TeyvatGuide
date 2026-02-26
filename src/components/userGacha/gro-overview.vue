@@ -58,20 +58,19 @@ const mixData = computed<Array<TGApp.Sqlite.Gacha.Gacha>>(() =>
   props.modelValue.filter((item) => item.uigfType === "500"),
 );
 </script>
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .gro-o-swiper {
+  --swiper-pagination-bottom: 16px;
+  --swiper-pagination-color: var(--tgc-pink-1);
+  --swiper-pagination-bullet-inactive-color: var(--tgc-od-white);
+  --swiper-pagination-bullet-inactive-opacity: 1;
+
   width: 100%;
   height: 100%;
   column-gap: 8px;
 }
 
-/* swiper dot */
-
 :deep(.swiper-pagination-bullet) {
-  background: var(--tgc-od-white);
-}
-
-:deep(.swiper-pagination-bullet-active) {
-  background-color: var(--tgc-pink-1);
+  box-shadow: 0 0 4px var(--common-shadow-4);
 }
 </style>
