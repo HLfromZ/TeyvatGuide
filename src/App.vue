@@ -28,7 +28,7 @@ import useAppStore from "@store/app.js";
 import useUserStore from "@store/user.js";
 import { app, core, event, webviewWindow } from "@tauri-apps/api";
 import type { Event, UnlistenFn } from "@tauri-apps/api/event";
-import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
+import { getCurrentWindow, LogicalPosition, LogicalSize } from "@tauri-apps/api/window";
 import { type CliMatches, getMatches } from "@tauri-apps/plugin-cli";
 import { mkdir } from "@tauri-apps/plugin-fs";
 import { openUrl } from "@tauri-apps/plugin-opener";
@@ -74,7 +74,10 @@ onMounted(async () => {
   textScaleListener = await event.listen<void>("text_scale_change", resizeWindow);
   const isShow = await win.isVisible();
   if (!isShow) {
-    await win.center();
+    if (needResize.value) await win.center();
+    // TODO: 结合窗口尺寸&放缩以及设计尺寸放置合适位置
+    const position = new LogicalPosition(20, 20);
+    await win.setPosition(position);
     await win.show();
   }
   if (showFeedback.value) {
@@ -485,7 +488,11 @@ async function handleCommands(cmds: CliMatches): Promise<void> {
   }
 }
 </script>
-<style lang="css" scoped>
+<style lang="scss" scoped>
+.v-application {
+  color: var(--app-page-content);
+}
+
 .app-container {
   height: 100%;
   background: var(--app-page-bg);
