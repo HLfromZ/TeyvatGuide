@@ -279,7 +279,10 @@ onUnmounted(() => {
 
 async function openJson(): Promise<void> {
   // @ts-expect-error import.meta
-  if (import.meta.env.MODE === "production") return;
+  if (import.meta.env.MODE === "production") {
+    await toPost();
+    return;
+  }
   await createPostJson(postId);
 }
 

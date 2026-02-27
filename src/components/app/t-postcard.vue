@@ -103,7 +103,7 @@
       data-html2canvas-ignore
       @click.stop="trySelect()"
     />
-    <div v-else class="tpc-info-id">
+    <div v-else class="tpc-info-id" @click="shareCard()">
       <span>{{ props.modelValue.post.post_id }}</span>
       <template v-if="isDevEnv">
         <span data-html2canvas-ignore>[{{ props.modelValue.post.view_type }}]</span>
@@ -230,7 +230,7 @@ function getCommonCard(item: TGApp.BBS.Post.FullData): RenderCard {
     const findG = forumList.value.find((i) => i.game_id === item.post.game_id);
     if (findG) {
       console.log(findG, item);
-      const findF = findG.forums.find((i) => i.id === item.forum.id);
+      const findF = findG.forums.find((i) => i.id === item.forum!.id);
       if (findF) forumIcon = findF.icon_pure;
     }
     forumData = { name: item.forum.name, icon: forumIcon, id: item.forum.id };
@@ -575,6 +575,7 @@ function onUserClick(): void {
   border-top-left-radius: 4px;
   box-shadow: 1px 1px 6px var(--tgc-dark-1);
   color: var(--tgc-white-1);
+  cursor: pointer;
   font-size: 12px;
   text-shadow: 0 0 4px var(--tgc-dark-1);
 }
