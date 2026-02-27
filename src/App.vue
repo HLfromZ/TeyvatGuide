@@ -74,10 +74,12 @@ onMounted(async () => {
   textScaleListener = await event.listen<void>("text_scale_change", resizeWindow);
   const isShow = await win.isVisible();
   if (!isShow) {
-    if (needResize.value) await win.center();
-    // TODO: 结合窗口尺寸&放缩以及设计尺寸放置合适位置
-    const position = new LogicalPosition(20, 20);
-    await win.setPosition(position);
+    if (needResize.value !== "false") await win.center();
+    else {
+      // TODO: 结合窗口尺寸&放缩以及设计尺寸放置合适位置
+      const position = new LogicalPosition(20, 20);
+      await win.setPosition(position);
+    }
     await win.show();
   }
   if (showFeedback.value) {
