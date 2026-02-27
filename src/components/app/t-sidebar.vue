@@ -791,9 +791,6 @@ async function tryLaunchGame(): Promise<void> {
 .side-list {
   position: relative;
   height: 100%;
-  padding-top: 0;
-  padding-right: 0;
-  padding-bottom: 0;
   font-family: var(--font-title);
 }
 
