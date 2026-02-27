@@ -803,7 +803,7 @@ async function tryLaunchGame(): Promise<void> {
 
 .bottom-menu {
   position: absolute;
-  bottom: 0;
+  bottom: 8px;
   width: 100%;
 }
 
