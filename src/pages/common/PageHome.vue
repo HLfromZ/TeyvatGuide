@@ -1,7 +1,7 @@
 <!-- 首页 -->
 <template>
   <v-app-bar>
-    <template #prepend>
+    <div :class="{ full: isLogin }" class="home-top-nav">
       <div v-if="isLogin" class="home-tools">
         <v-select
           v-model="curGid"
@@ -45,8 +45,6 @@
         </v-select>
         <TGameNav :model-value="curGid" />
       </div>
-    </template>
-    <template #append>
       <div class="home-select">
         <v-select
           v-model="oldItems"
@@ -63,7 +61,7 @@
           确定
         </v-btn>
       </div>
-    </template>
+    </div>
   </v-app-bar>
   <div class="home-container">
     <component :is="item" v-for="item in components" :key="item" @success="loadEnd(item)" />
@@ -211,6 +209,20 @@ async function loadEnd(item: ReturnType<typeof defineComponent>): Promise<void> 
 }
 </script>
 <style lang="scss" scoped>
+.home-top-nav {
+  position: relative;
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  overflow-x: auto;
+
+  &.full {
+    justify-content: space-between;
+  }
+}
+
 .home-container {
   position: relative;
   display: flex;
