@@ -10,7 +10,7 @@
           class="toc-list-item"
           @click="toChannel(item)"
         >
-          <TMiImg :ori="true" :src="item.icon" alt="icon" />
+          <img :src="item.icon" alt="icon" />
           <span class="toc-list-title">{{ item.title }}</span>
           <span class="toc-list-id">GID:{{ item.gid }}</span>
         </div>
@@ -19,7 +19,6 @@
   </TOverlay>
 </template>
 <script lang="ts" setup>
-import TMiImg from "@comp/app/t-mi-img.vue";
 import TOverlay from "@comp/app/t-overlay.vue";
 import showSnackbar from "@comp/func/snackbar.js";
 import bbsEnum from "@enum/bbs.js";

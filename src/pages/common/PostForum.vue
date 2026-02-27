@@ -20,10 +20,9 @@
       >
         <template #selection="{ item }">
           <div class="select-item main">
-            <TMiImg
+            <img
               v-if="item.icon"
               :alt="item.text"
-              :ori="true"
               :src="item.icon"
               :title="item.text"
               class="icon"
@@ -33,7 +32,7 @@
         </template>
         <template #item="{ props, item }">
           <div :class="{ selected: item.gid === curGid }" class="select-item sub" v-bind="props">
-            <TMiImg v-if="item.icon" :alt="item.text" :ori="true" :src="item.icon" class="icon" />
+            <img v-if="item.icon" :alt="item.text" :src="item.icon" class="icon" />
             <span>{{ item.text }}</span>
           </div>
         </template>
@@ -49,7 +48,7 @@
       >
         <template #selection="{ item }">
           <div class="select-item main">
-            <TMiImg :alt="item.text" :ori="true" :src="item.icon" :title="item.text" class="icon" />
+            <img :alt="item.text" :src="item.icon" :title="item.text" class="icon" />
             <span>{{ item.text }}</span>
           </div>
         </template>
@@ -60,7 +59,7 @@
             v-bind="props"
             @click="() => (selectedForum = item)"
           >
-            <TMiImg :alt="item.text" :ori="true" :src="item.icon" class="icon" />
+            <img :alt="item.text" :src="item.icon" class="icon" />
             <span>{{ item.text }}</span>
           </div>
         </template>
@@ -111,7 +110,6 @@
 </template>
 <script lang="ts" setup>
 import TGameNav from "@comp/app/t-gameNav.vue";
-import TMiImg from "@comp/app/t-mi-img.vue";
 import TPostCard from "@comp/app/t-postcard.vue";
 import showLoading from "@comp/func/loading.js";
 import showSnackbar from "@comp/func/snackbar.js";
