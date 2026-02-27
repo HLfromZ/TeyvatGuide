@@ -491,9 +491,8 @@ function handleUser(user: TGApp.BBS.Post.User): void {
 .tp-post-body {
   position: relative;
   width: v-bind(viewWidth); /* stylelint-disable-line value-keyword-case */
+  max-width: calc(100% - 100px);
   margin: 0 auto;
-
-  // max-width: calc(100% - 100px);
   font-family: var(--font-text);
   transition: width 0.3s ease-in-out;
 }
