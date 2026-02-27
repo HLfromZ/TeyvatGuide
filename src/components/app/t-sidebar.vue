@@ -1,6 +1,6 @@
 <!-- 应用侧边栏 -->
 <template>
-  <v-navigation-drawer :permanent="true" :rail="rail" class="tsb-box">
+  <v-navigation-drawer :width="160" :permanent="true" :rail="rail" class="tsb-box">
     <v-list :nav="true" class="side-list" density="compact">
       <v-list-item
         :append-icon="!rail ? 'mdi-chevron-left' : undefined"
