@@ -100,6 +100,27 @@ export function getWindowSize(label: string): PhysicalSize {
 }
 
 /**
+ * 判断窗口位置
+ * @since Beta v0.9.8
+ * @returns 无返回值
+ */
+export async function setWindowPos(): Promise<void> {
+  const screen = await currentMonitor();
+  if (screen === null) {
+    showSnackbar.error("获取屏幕信息失败！", 3000);
+    return;
+  }
+  const windowCur = webviewWindow.getCurrentWebviewWindow();
+  const textScale = await invoke<number>("read_text_scale");
+  if (await windowCur.isMaximized()) return;
+  const designSize = getWindowSize(windowCur.label);
+  console.log(textScale, designSize);
+  // TODO: 判断设计大小是否会超出窗口大小
+  // 如果超出，设计合适窗口位置使得顶部能够展示或者将窗口最大化
+  // 否则直接居中
+}
+
+/**
  * 窗口适配
  * @since Beta v0.9.6
  * @returns 无返回值
